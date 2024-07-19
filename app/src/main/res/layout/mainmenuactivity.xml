@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAlignment="center"
+    tools:context=".MainMenuController">
+
+    <TextView
+        android:id="@+id/Header"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:background="#465A9A"
+        android:paddingTop="20px"
+        android:text="Main Menu"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/CoursesButton"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#8AA6FF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Courses"
+        android:textSize="48sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+    <Button
+        android:id="@+id/AssessmentsButton"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#8AA6FF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Assessments"
+        android:textSize="48sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CoursesButton" />
+
+    <Button
+        android:id="@+id/TermsButton"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#8AA6FF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Terms"
+        android:textSize="48sp"
+        app:barrierAllowsGoneWidgets="false"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/CoursesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

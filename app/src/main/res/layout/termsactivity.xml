@@ -24,25 +24,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="671dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/AddTermButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#7C9BFF"
+        android:text="Add New Term"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Header">
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+    <ScrollView
+        android:layout_width="411dp"
+        android:layout_height="624dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AddTermButton"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <Button
-                android:id="@+id/AddTermButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#7C9BFF"
-                android:text="Add New Term" />
 
             <Button
                 android:id="@+id/button2"
@@ -66,7 +71,7 @@
         android:backgroundTint="#465A9A"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
-        android:text="<"
+        android:text="back"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@+id/Header"
         app:layout_constraintStart_toStartOf="@+id/Header"

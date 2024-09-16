@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">C195MobileApp</string>
+    <string name="StartDate">Start Date</string>
+    <string name="AssessmentName">Assessment Name</string>
+    <string name="EndDate">End Date</string>
+    <string name="AllAssessments">All Assessments</string>
 </resources>

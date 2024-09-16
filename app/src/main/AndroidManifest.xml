@@ -45,6 +45,10 @@
             android:name=".AddAssessmentsController"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".UpdateAssessmentsController"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

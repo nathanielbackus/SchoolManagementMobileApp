@@ -4,4 +4,5 @@
     <string name="AssessmentName">Assessment Name</string>
     <string name="EndDate">End Date</string>
     <string name="AllAssessments">All Assessments</string>
+    <string name="AllCourses">All Courses</string>
 </resources>

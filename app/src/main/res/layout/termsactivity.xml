@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#465A9A"
-    tools:context=".TermsController">
+    tools:context=".controllers.TermsController">
 
     <TextView
         android:id="@+id/Header"

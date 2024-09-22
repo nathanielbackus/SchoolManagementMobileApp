@@ -1,4 +1,4 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.model;
 
 public class AssessmentModel {
     private int AssessmentID;
@@ -53,12 +53,22 @@ public class AssessmentModel {
 
     @Override
     public String toString() {
-        return "AssessmentModel{" +
-                "AssessmentID=" + AssessmentID +
-                ", AssessmentTitle='" + AssessmentTitle + '\'' +
-                ", AssessmentStart='" + AssessmentStart + '\'' +
-                ", AssessmentEnd='" + AssessmentEnd + '\'' +
-                ", isObjective=" + AssessmentType +
-                '}';
+        if (AssessmentType == false) {
+            return "Assessment ID: " + AssessmentID + "\n" +
+                    "Assessment Title: '" + AssessmentTitle + "'\n" +
+                    "Assessment Start Date: '" + AssessmentStart + "'\n" +
+                    "Assessment End Date: '" + AssessmentEnd + "'\n" +
+                    "Assessment Type: Performance";
+
+        } else {
+            return "Assessment ID: " + AssessmentID + "\n" +
+                    "Assessment Title: '" + AssessmentTitle + "'\n" +
+                    "Assessment Start Date: '" + AssessmentStart + "'\n" +
+                    "Assessment End Date: '" + AssessmentEnd + "'\n" +
+                    "Assessment Type: Objective";
+        }
     }
 }
+
+//NEEDS TO HAVE ASSOCIATED NOTES, NOTES NEED TO BE SHAREABLE VIA EMAIL
+//NEEDS TO SEND PUSH NOTIFICATION THAT AASSESSMENT COMING SOON

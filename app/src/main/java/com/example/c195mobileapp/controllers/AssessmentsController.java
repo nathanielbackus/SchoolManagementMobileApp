@@ -1,8 +1,11 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.controllers;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,30 +17,56 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.c195mobileapp.model.AssessmentModel;
+import com.example.c195mobileapp.database.DataBaseHelper;
+import com.example.c195mobileapp.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssessmentsController extends AppCompatActivity {
-    //declare variables
+    // Declare variables
     Button ToAddAssessmentActivity, BackButton;
     ListView assessmentListView;
-    ArrayAdapter appointmentArrayAdapter;
+    ArrayAdapter<SpannableString> appointmentArrayAdapter; // ArrayAdapter with SpannableString
     DataBaseHelper dataBaseHelper;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        //set layout
+        // Set layout
         setContentView(R.layout.assessmentsactivity);
         assessmentListView = findViewById(R.id.assessmentListView);
 
-        //get data from database
+        // Get data from database
         dataBaseHelper = new DataBaseHelper(AssessmentsController.this);
         List<AssessmentModel> allAppointments = dataBaseHelper.getAllAppointments();
 
-        //display data in list view
-        appointmentArrayAdapter = new ArrayAdapter<AssessmentModel>(AssessmentsController.this, android.R.layout.simple_list_item_1, allAppointments);
+        // Prepare the array for SpannableString
+        List<SpannableString> formattedAssessments = new ArrayList<>();
+
+        // Format each item using SpannableString
+        for (AssessmentModel model : allAppointments) {
+            // Creating a string for display
+            String text = "Assessment Title: " + model.getAssessmentTitle() + "\n" +
+                    "Assessment Start: " + model.getAssessmentStart() + "\n" +
+                    "Assessment End: " + model.getAssessmentEnd() + "\n" +
+                    "Type: " + (model.getAssessmentType() ? "Objective" : "Performance");
+
+            // Creating SpannableString and making the title bold
+            SpannableString spannableString = new SpannableString(text);
+            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            // Adding formatted string to the list
+            formattedAssessments.add(spannableString);
+        }
+
+        // Set the ArrayAdapter with formatted text
+        appointmentArrayAdapter = new ArrayAdapter<>(AssessmentsController.this, android.R.layout.simple_list_item_1, formattedAssessments);
+
         if (allAppointments == null || allAppointments.isEmpty()) {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         } else {
@@ -45,9 +74,11 @@ public class AssessmentsController extends AppCompatActivity {
                 Log.d("AssessmentsController", "Appointment: " + model.toString());
             }
         }
+
+        // Set the adapter to the ListView
         assessmentListView.setAdapter(appointmentArrayAdapter);
 
-        //click go back to main menu
+        // Click to go back to main menu
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +88,7 @@ public class AssessmentsController extends AppCompatActivity {
             }
         });
 
-        //click go to add assessment activity
+        // Click to go to add assessment activity
         ToAddAssessmentActivity = (Button) findViewById(R.id.ToAddAssessmentActivity);
         ToAddAssessmentActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -66,14 +97,14 @@ public class AssessmentsController extends AppCompatActivity {
             }
         });
 
-        //click go to update assessment activity
+        // Click to go to update assessment activity
         assessmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Create an Intent to start the UpdateAssessmentsController
                 Intent intent = new Intent(AssessmentsController.this, UpdateAssessmentsController.class);
                 // Get the clicked AssessmentModel from the list
-                AssessmentModel selectedAssessment = (AssessmentModel) parent.getItemAtPosition(position);
+                AssessmentModel selectedAssessment = allAppointments.get(position);
                 // Pass the selected assessment data to the next activity
                 intent.putExtra("assessmentId", selectedAssessment.getAssessmentID());
                 intent.putExtra("assessmentTitle", selectedAssessment.getAssessmentTitle());
@@ -85,8 +116,5 @@ public class AssessmentsController extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
     }
 }

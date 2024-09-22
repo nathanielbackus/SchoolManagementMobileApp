@@ -1,4 +1,4 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.example.c195mobileapp.model.AssessmentModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ASSESSMENT_TITLE + " TEXT, "
                 + COLUMN_START_DATE + " TEXT, "  // Assuming date is stored as TEXT
                 + COLUMN_END_DATE + " TEXT, "
-                + COLUMN_ASSESSMENT_TYPE + " INTEGER)";
+                + COLUMN_ASSESSMENT_TYPE + " INTEGER);"
+
+                "CREATE TABLE " + COURSE_TABLE + "("
+                        + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + COLUMN_COURSE_TITLE + " TEXT, "
+                        + COLUMN_START_DATE + " TEXT, "  // Assuming date is stored as TEXT
+                        + COLUMN_END_DATE + " TEXT, "
+
+    ";
         db.execSQL(createTableStatement);
     }
     // this is called if the database version number changes. prevents errors when you change database design.
@@ -65,22 +75,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
-
     public boolean updateAssessment(AssessmentModel assessmentModel) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + ASSESSMENT_TABLE + " SET "
-                + COLUMN_ASSESSMENT_TITLE + " = '" + assessmentModel.getAssessmentTitle() + "', "
-                + COLUMN_START_DATE + " = '" + assessmentModel.getAssessmentStart() + "', "
-                + COLUMN_END_DATE + " = '" + assessmentModel.getAssessmentEnd() + "', "
-                + COLUMN_ASSESSMENT_TYPE + " = '" + assessmentModel.getAssessmentType() + "' "
-                + "WHERE " + COLUMN_ID + " = " + assessmentModel.getAssessmentID();
-        Cursor cursor = db.rawQuery(queryString, null);
-        if (cursor.moveToFirst()) {
-            return true;
-        } else {
-            return false;
-        }
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_ASSESSMENT_TITLE, assessmentModel.getAssessmentTitle());
+        cv.put(COLUMN_START_DATE, assessmentModel.getAssessmentStart());
+        cv.put(COLUMN_END_DATE, assessmentModel.getAssessmentEnd());
+        cv.put(COLUMN_ASSESSMENT_TYPE, assessmentModel.getAssessmentType() ? 1 : 0);
+        int update = db.update(ASSESSMENT_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
+        db.close();
+        return update > 0;
     }
+
 
     public List<AssessmentModel> getAllAppointments() {
         List<AssessmentModel> assessmentReturnList = new ArrayList<>();
@@ -110,5 +116,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return assessmentReturnList; // Return the populated list
     }
+
+
 
 }

@@ -1,4 +1,4 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.c195mobileapp.model.AssessmentModel;
+import com.example.c195mobileapp.database.DataBaseHelper;
+import com.example.c195mobileapp.R;
 
 public class AddAssessmentsController extends AppCompatActivity {
     Button BackButton, AddAssessmentButton;
@@ -25,7 +29,7 @@ public class AddAssessmentsController extends AppCompatActivity {
         setContentView(R.layout.addassessmentsactivity);
 
         BackButton = findViewById(R.id.BackButton);
-        AddAssessmentButton = findViewById(R.id.UpdateAssessmentButton);
+        AddAssessmentButton = findViewById(R.id.AddAssessmentButton);
         editName = findViewById(R.id.editName);
         editStart = findViewById(R.id.editStart);
         editEnd = findViewById(R.id.editEnd);

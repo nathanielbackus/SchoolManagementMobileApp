@@ -1,4 +1,4 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.c195mobileapp.R;
 
 public class TermsController extends AppCompatActivity {
     @Override

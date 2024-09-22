@@ -1,4 +1,4 @@
-package com.example.c195mobileapp;
+package com.example.c195mobileapp.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.c195mobileapp.model.AssessmentModel;
+import com.example.c195mobileapp.database.DataBaseHelper;
+import com.example.c195mobileapp.R;
 
 public class UpdateAssessmentsController extends AppCompatActivity {
     Button BackButton, UpdateAssessmentButton;
@@ -44,6 +48,7 @@ public class UpdateAssessmentsController extends AppCompatActivity {
         editEnd.setText(assessmentEnd);
         switchPerfObj.setChecked(assessmentType);
 
+
         // Back button action to go back to the AssessmentsController
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,5 +79,3 @@ public class UpdateAssessmentsController extends AppCompatActivity {
         });
     }
 }
-
-        // Set

@@ -15,7 +15,7 @@ import com.example.c195mobileapp.model.AssessmentModel;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.R;
 
-public class UpdateAssessmentsController extends AppCompatActivity {
+public class UpdateAssessmentController extends AppCompatActivity {
     Button BackButton, UpdateAssessmentButton;
     EditText editName, editStart, editEnd;
     Switch switchPerfObj;
@@ -53,7 +53,7 @@ public class UpdateAssessmentsController extends AppCompatActivity {
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UpdateAssessmentsController.this, AssessmentsController.class);
+                Intent intent = new Intent(UpdateAssessmentController.this, AssessmentController.class);
                 startActivity(intent);
             }
         });
@@ -71,10 +71,10 @@ public class UpdateAssessmentsController extends AppCompatActivity {
                         switchPerfObj.isChecked()
                 );
 
-                DataBaseHelper dbHelper = new DataBaseHelper(UpdateAssessmentsController.this);
+                DataBaseHelper dbHelper = new DataBaseHelper(UpdateAssessmentController.this);
                 boolean success = dbHelper.updateAssessment(updatedAssessment); // Assuming you have an update method
 
-                Toast.makeText(UpdateAssessmentsController.this, "Update Success: " + success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateAssessmentController.this, "Update Success: " + success, Toast.LENGTH_SHORT).show();
             }
         });
     }

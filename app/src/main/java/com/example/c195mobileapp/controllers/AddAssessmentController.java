@@ -15,8 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.c195mobileapp.model.AssessmentModel;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.R;
+import com.example.c195mobileapp.database.AssessmentDAO;
 
-public class AddAssessmentsController extends AppCompatActivity {
+public class AddAssessmentController extends AppCompatActivity {
     Button BackButton, AddAssessmentButton;
     EditText editName, editStart, editEnd;
     boolean perfOrObjBool;
@@ -38,7 +39,7 @@ public class AddAssessmentsController extends AppCompatActivity {
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddAssessmentsController.this, AssessmentsController.class);
+                Intent intent = new Intent(AddAssessmentController.this, AssessmentController.class);
                 startActivity(intent);
             }
         });
@@ -50,15 +51,15 @@ public class AddAssessmentsController extends AppCompatActivity {
                     assessmentModel = new AssessmentModel(-1, editName.getText().toString(),editStart.getText().toString(),editEnd.getText().toString(), switchPerfObj.isChecked());
 
                 } catch (Exception e){
-                    Toast.makeText(AddAssessmentsController.this, "Error Creating Assessment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddAssessmentController.this, "Error Creating Assessment", Toast.LENGTH_SHORT).show();
                     assessmentModel = new AssessmentModel(-1, "error", "error","error",false);
 
                 }
-                Toast.makeText(AddAssessmentsController.this, assessmentModel.toString(), Toast.LENGTH_SHORT).show();
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(AddAssessmentsController.this);
-                boolean success = dataBaseHelper.addAssessment(assessmentModel);
+                Toast.makeText(AddAssessmentController.this, assessmentModel.toString(), Toast.LENGTH_SHORT).show();
+                DataBaseHelper dataBaseHelper = new DataBaseHelper(AddAssessmentController.this);
+                boolean success = AssessmentDAO.addAssessment(assessmentModel);
 
-                Toast.makeText(AddAssessmentsController.this, "Success= " + success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddAssessmentController.this, "Success= " + success, Toast.LENGTH_SHORT).show();
                 //0 = false = performance          1 = true = objective
             }
         });

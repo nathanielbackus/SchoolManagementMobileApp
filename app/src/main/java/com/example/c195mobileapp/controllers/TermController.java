@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.c195mobileapp.R;
 
-public class TermsController extends AppCompatActivity {
+public class TermController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +19,7 @@ public class TermsController extends AppCompatActivity {
         Button BackButton = (Button)findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                Intent intent = new Intent(TermsController.this, MainMenuController.class);
+                Intent intent = new Intent(TermController.this, MainMenuController.class);
                 startActivity(intent);
             }
         });

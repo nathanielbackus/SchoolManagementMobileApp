@@ -22,35 +22,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controllers.TermsController"
+            android:name=".controllers.TermController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddTermsController"
+            android:name=".controllers.AddTermController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.CoursesController"
+            android:name=".controllers.CourseController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddCoursesController"
+            android:name=".controllers.AddCourseController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.UpdateCoursesController"
+            android:name=".controllers.UpdateCourseController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AssessmentsController"
+            android:name=".controllers.AssessmentController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddAssessmentsController"
+            android:name=".controllers.AddAssessmentController"
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.UpdateAssessmentsController"
+            android:name=".controllers.UpdateAssessmentController"
             android:exported="true">
         </activity>
     </application>

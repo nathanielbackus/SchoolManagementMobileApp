@@ -18,7 +18,7 @@ import com.example.c195mobileapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoursesController extends AppCompatActivity {
+public class CourseController extends AppCompatActivity {
     Button ToAddCourseActivity, BackButton;
     ListView courseListView;
     ArrayAdapter<SpannableString> courseArrayAdapter; // ArrayAdapter with SpannableString
@@ -32,7 +32,7 @@ public class CoursesController extends AppCompatActivity {
         courseListView = findViewById(R.id.courseListView);
 
         // Get data from database
-        dataBaseHelper = new DataBaseHelper(CoursesController.this);
+        dataBaseHelper = new DataBaseHelper(CourseController.this);
         List<CourseModel> allCourses = dataBaseHelper.getAllCourses();
 
         // Prepare the array for SpannableString
@@ -52,7 +52,7 @@ public class CoursesController extends AppCompatActivity {
         }
 
         // Set the ArrayAdapter with formatted text
-        courseArrayAdapter = new ArrayAdapter<>(CoursesController.this, android.R.layout.simple_list_item_1, formattedCourses);
+        courseArrayAdapter = new ArrayAdapter<>(CourseController.this, android.R.layout.simple_list_item_1, formattedCourses);
 
     }
 }

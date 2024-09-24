@@ -24,7 +24,7 @@ import com.example.c195mobileapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssessmentsController extends AppCompatActivity {
+public class AssessmentController extends AppCompatActivity {
     // Declare variables
     Button ToAddAssessmentActivity, BackButton;
     ListView assessmentListView;
@@ -42,7 +42,7 @@ public class AssessmentsController extends AppCompatActivity {
         assessmentListView = findViewById(R.id.assessmentListView);
 
         // Get data from database
-        dataBaseHelper = new DataBaseHelper(AssessmentsController.this);
+        dataBaseHelper = new DataBaseHelper(AssessmentController.this);
         List<AssessmentModel> allAppointments = dataBaseHelper.getAllAppointments();
 
         // Prepare the array for SpannableString
@@ -65,7 +65,7 @@ public class AssessmentsController extends AppCompatActivity {
         }
 
         // Set the ArrayAdapter with formatted text
-        appointmentArrayAdapter = new ArrayAdapter<>(AssessmentsController.this, android.R.layout.simple_list_item_1, formattedAssessments);
+        appointmentArrayAdapter = new ArrayAdapter<>(AssessmentController.this, android.R.layout.simple_list_item_1, formattedAssessments);
 
         if (allAppointments == null || allAppointments.isEmpty()) {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
@@ -83,7 +83,7 @@ public class AssessmentsController extends AppCompatActivity {
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AssessmentsController.this, MainMenuController.class);
+                Intent intent = new Intent(AssessmentController.this, MainMenuController.class);
                 startActivity(intent);
             }
         });
@@ -92,7 +92,7 @@ public class AssessmentsController extends AppCompatActivity {
         ToAddAssessmentActivity = (Button) findViewById(R.id.ToAddAssessmentActivity);
         ToAddAssessmentActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(AssessmentsController.this, AddAssessmentsController.class);
+                Intent intent = new Intent(AssessmentController.this, AddAssessmentController.class);
                 startActivity(intent);
             }
         });
@@ -102,7 +102,7 @@ public class AssessmentsController extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Create an Intent to start the UpdateAssessmentsController
-                Intent intent = new Intent(AssessmentsController.this, UpdateAssessmentsController.class);
+                Intent intent = new Intent(AssessmentController.this, UpdateAssessmentController.class);
                 // Get the clicked AssessmentModel from the list
                 AssessmentModel selectedAssessment = allAppointments.get(position);
                 // Pass the selected assessment data to the next activity

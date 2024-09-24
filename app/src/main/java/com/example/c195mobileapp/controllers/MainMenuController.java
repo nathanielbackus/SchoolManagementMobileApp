@@ -18,7 +18,7 @@ public class MainMenuController extends AppCompatActivity {
         Button TermsButton = findViewById(R.id.TermsButton);
         TermsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenuController.this, TermsController.class);
+                Intent intent = new Intent(MainMenuController.this, TermController.class);
                 startActivity(intent);
             }
         });
@@ -26,7 +26,7 @@ public class MainMenuController extends AppCompatActivity {
         Button CoursesButton = findViewById(R.id.CoursesButton);
         CoursesButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenuController.this, CoursesController.class);
+                Intent intent = new Intent(MainMenuController.this, CourseController.class);
                 startActivity(intent);
             }
         });
@@ -34,7 +34,7 @@ public class MainMenuController extends AppCompatActivity {
         Button AssessmentsButton = findViewById(R.id.AssessmentsButton);
         AssessmentsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenuController.this, AssessmentsController.class);
+                Intent intent = new Intent(MainMenuController.this, AssessmentController.class);
                 startActivity(intent);
             }
         });

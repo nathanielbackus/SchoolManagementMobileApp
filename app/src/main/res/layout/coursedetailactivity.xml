@@ -4,18 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".controllers.AddAssessmentController">
+    tools:context=".controllers.CourseDetailController">
 
     <Button
-        android:id="@+id/AddAssessmentButton"
+        android:id="@+id/AddCourseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="40dp"
-        android:layout_marginTop="40dp"
-        android:text="Add New Assessment"
+        android:text="Add New Course"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEnd" />
+        app:layout_constraintTop_toBottomOf="@id/noteListView" />
 
     <TextView
         android:id="@+id/Header"
@@ -24,7 +23,7 @@
         android:background="#465A9A"
         android:paddingTop="40px"
         android:paddingRight="20px"
-        android:text="Add Assessment"
+        android:text="Add Course"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -48,77 +47,71 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/switchPerfObj"
-        android:layout_width="56dp"
-        android:layout_height="17dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
-
     <EditText
         android:id="@+id/editStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="40dp"
-        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/StartDate"
         android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@id/editEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchPerfObj" />
+        app:layout_constraintTop_toBottomOf="@id/editName" />
 
     <EditText
         android:id="@+id/editEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="40dp"
-        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/EndDate"
         android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/mentorSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editStart" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Performance Assessment"
-        app:layout_constraintEnd_toStartOf="@+id/switchPerfObj"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Objective Assessment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toEndOf="@+id/switchPerfObj"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintTop_toBottomOf="@id/editStart" />
 
     <EditText
         android:id="@+id/editName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="40dp"
-        android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="@string/AssessmentName"
+        android:hint="Course Name"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/editStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header" />
 
+    <ListView
+        android:id="@+id/assessmentListView"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:choiceMode="multipleChoice"
+        app:layout_constraintBottom_toTopOf="@id/noteListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mentorSpinner" />
+
+    <Spinner
+        android:id="@+id/mentorSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="41dp"
+        app:layout_constraintBottom_toTopOf="@id/assessmentListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+
+    <ListView
+        android:id="@+id/noteListView"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toTopOf="@+id/AddCourseButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/assessmentListView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

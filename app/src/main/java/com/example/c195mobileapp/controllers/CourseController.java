@@ -33,26 +33,29 @@ public class CourseController extends AppCompatActivity {
 
         // Get data from database
         dataBaseHelper = new DataBaseHelper(CourseController.this);
-        List<CourseModel> allCourses = dataBaseHelper.getAllCourses();
+//        List<CourseModel> allCourses = dataBaseHelper.getAllCourses();
 
         // Prepare the array for SpannableString
         List<SpannableString> formattedCourses = new ArrayList<>();
-        for (CourseModel model : allCourses) {
-            // Creating a string for display
-            String text = "Course Title: " + model.getCourseTitle() + "\n" +
-                    "Course Start: " + model.getCourseStart() + "\n" +
-                    "Course End: " + model.getCourseEnd();
+//        for (CourseModel model : allCourses) {
+//            // Creating a string for display
+//            String text = "Course Title: " + model.getCourseTitle() + "\n" +
+//                    "Course Start: " + model.getCourseStart() + "\n" +
+//                    "Course End: " + model.getCourseEnd();
+//
+//            // Creating SpannableString and making the title bold
+//            SpannableString spannableString = new SpannableString(text);
+//            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//            // Adding formatted string to the list
+//            formattedCourses.add(spannableString);
+//        }
 
-            // Creating SpannableString and making the title bold
-            SpannableString spannableString = new SpannableString(text);
-            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            // Adding formatted string to the list
-            formattedCourses.add(spannableString);
-        }
 
         // Set the ArrayAdapter with formatted text
         courseArrayAdapter = new ArrayAdapter<>(CourseController.this, android.R.layout.simple_list_item_1, formattedCourses);
 
     }
 }
+
+//what should we do if there are no mentors?

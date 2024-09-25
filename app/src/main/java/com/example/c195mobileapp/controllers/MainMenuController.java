@@ -38,5 +38,21 @@ public class MainMenuController extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button NotesButton = findViewById(R.id.NotesButton);
+        NotesButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMenuController.this, NoteController.class);
+                startActivity(intent);
+            }
+        });
+
+        Button MentorsButton = findViewById(R.id.MentorsButton);
+        MentorsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMenuController.this, MentorController.class);
+                startActivity(intent);
+            }
+        });
     }
 }

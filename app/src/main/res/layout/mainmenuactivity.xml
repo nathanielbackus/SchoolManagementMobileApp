@@ -8,6 +8,21 @@
     android:textAlignment="center"
     tools:context=".controllers.MainMenuController">
 
+    <Button
+        android:id="@+id/MentorsButton"
+        android:layout_width="350dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#8AA6FF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Mentors"
+        android:textSize="48sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toTopOf="@id/NotesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CoursesButton" />
+
     <TextView
         android:id="@+id/Header"
         android:layout_width="0dp"
@@ -28,7 +43,7 @@
     <Button
         android:id="@+id/CoursesButton"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="75dp"
         android:backgroundTint="#8AA6FF"
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -38,27 +53,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Header" />
+        app:layout_constraintTop_toBottomOf="@id/Header" />
 
     <Button
         android:id="@+id/AssessmentsButton"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="75dp"
         android:backgroundTint="#8AA6FF"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="Assessments"
         android:textSize="48sp"
         app:cornerRadius="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/CoursesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TermsButton" />
+
+    <Button
+        android:id="@+id/NotesButton"
+        android:layout_width="350dp"
+        android:layout_height="75dp"
+        android:backgroundTint="#8AA6FF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Notes"
+        android:textSize="48sp"
+        app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CoursesButton" />
+        app:layout_constraintTop_toBottomOf="@+id/MentorsButton" />
 
     <Button
         android:id="@+id/TermsButton"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="75dp"
         android:backgroundTint="#8AA6FF"
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -66,7 +96,7 @@
         android:textSize="48sp"
         app:barrierAllowsGoneWidgets="false"
         app:cornerRadius="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/CoursesButton"
+        app:layout_constraintBottom_toTopOf="@id/AssessmentsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header" />

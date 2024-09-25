@@ -7,12 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.c195mobileapp.R;
 
-public class AddCourseController extends AppCompatActivity {
+public class CourseDetailController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.addcoursesactivity);
+        setContentView(R.layout.coursedetailactivity);
     }
 }
 

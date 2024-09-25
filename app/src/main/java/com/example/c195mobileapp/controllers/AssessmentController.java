@@ -17,6 +17,7 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.c195mobileapp.database.AssessmentDAO;
 import com.example.c195mobileapp.model.AssessmentModel;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.R;
@@ -29,7 +30,7 @@ public class AssessmentController extends AppCompatActivity {
     Button ToAddAssessmentActivity, BackButton;
     ListView assessmentListView;
     ArrayAdapter<SpannableString> appointmentArrayAdapter; // ArrayAdapter with SpannableString
-    DataBaseHelper dataBaseHelper;
+    AssessmentDAO assessmentDAO;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,9 +42,12 @@ public class AssessmentController extends AppCompatActivity {
         setContentView(R.layout.assessmentsactivity);
         assessmentListView = findViewById(R.id.assessmentListView);
 
-        // Get data from database
-        dataBaseHelper = new DataBaseHelper(AssessmentController.this);
-        List<AssessmentModel> allAppointments = dataBaseHelper.getAllAppointments();
+        // Initialize the DAO by passing the database helper
+        DataBaseHelper dbHelper = new DataBaseHelper(AssessmentController.this);
+        assessmentDAO = new AssessmentDAO(dbHelper);
+
+        // Get data from database using DAO
+        List<AssessmentModel> allAppointments = assessmentDAO.getAllAppointments();
 
         // Prepare the array for SpannableString
         List<SpannableString> formattedAssessments = new ArrayList<>();
@@ -92,7 +96,7 @@ public class AssessmentController extends AppCompatActivity {
         ToAddAssessmentActivity = (Button) findViewById(R.id.ToAddAssessmentActivity);
         ToAddAssessmentActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(AssessmentController.this, AddAssessmentController.class);
+                Intent intent = new Intent(AssessmentController.this, AssessmentDetailController.class);
                 startActivity(intent);
             }
         });
@@ -101,8 +105,8 @@ public class AssessmentController extends AppCompatActivity {
         assessmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Create an Intent to start the UpdateAssessmentsController
-                Intent intent = new Intent(AssessmentController.this, UpdateAssessmentController.class);
+                // Create an Intent to start the AssessmentDetailController
+                Intent intent = new Intent(AssessmentController.this, AssessmentDetailController.class);
                 // Get the clicked AssessmentModel from the list
                 AssessmentModel selectedAssessment = allAppointments.get(position);
                 // Pass the selected assessment data to the next activity

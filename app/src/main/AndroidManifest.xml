@@ -26,7 +26,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddTermController"
+            android:name=".controllers.TermDetailController"
             android:exported="true">
         </activity>
         <activity
@@ -34,7 +34,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddCourseController"
+            android:name=".controllers.CourseDetailController"
             android:exported="true">
         </activity>
         <activity
@@ -46,7 +46,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".controllers.AddAssessmentController"
+            android:name=".controllers.AssessmentDetailController"
             android:exported="true">
         </activity>
         <activity

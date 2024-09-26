@@ -5,4 +5,8 @@
     <string name="EndDate">End Date</string>
     <string name="AllAssessments">All Assessments</string>
     <string name="AllCourses">All Courses</string>
+    <string name="AllMentors">All Mentors</string>
+    <string name="MentorName">Mentor Name</string>
+    <string name="MentorEmail">Mentor Email</string>
+    <string name="MentorPhone">Mentor Phone</string>
 </resources>

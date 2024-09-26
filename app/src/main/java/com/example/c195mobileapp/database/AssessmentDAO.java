@@ -16,6 +16,7 @@ public class AssessmentDAO {
     public AssessmentDAO(SQLiteOpenHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
+
     public boolean deleteAssessment(AssessmentModel assessmentModel) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int result = db.delete("ASSESSMENT_TABLE", "ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
@@ -53,26 +54,20 @@ public class AssessmentDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
-        // Check if the cursor contains data
         if (cursor.moveToFirst()) {
             do {
-                // Fetching data from each row
-                int assessmentID = cursor.getInt(0);          // Assuming column 0 is the assessment ID
-                String assessmentTitle = cursor.getString(1); // Assuming column 1 is the assessment title
-                String assessmentStart = cursor.getString(2); // Assuming column 2 is the assessment start date
-                String assessmentEnd = cursor.getString(3);   // Assuming column 3 is the assessment end date
-                boolean assessmentType = cursor.getInt(4) == 1; // Assuming column 4 stores a boolean as an integer (0 or 1)
-
-                // Create a new AssessmentModel and add it to the list
+                int assessmentID = cursor.getInt(0);
+                String assessmentTitle = cursor.getString(1);
+                String assessmentStart = cursor.getString(2);
+                String assessmentEnd = cursor.getString(3);
+                boolean assessmentType = cursor.getInt(4) == 1; //column 4 stores an integer for true/false
                 AssessmentModel assessmentModel = new AssessmentModel(assessmentID, assessmentTitle, assessmentStart, assessmentEnd, assessmentType);
                 assessmentReturnList.add(assessmentModel);
-            } while (cursor.moveToNext()); // Continue looping until there are no more rows
+            } while (cursor.moveToNext()); //loop through data with the cursor
         }
-
-        // Close the cursor and database connection
         cursor.close();
         db.close();
 
-        return assessmentReturnList; // Return the populated list
+        return assessmentReturnList;
     }
 }

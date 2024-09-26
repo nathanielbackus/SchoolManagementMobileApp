@@ -96,11 +96,6 @@ public class AssessmentDetailController extends AppCompatActivity {
             }
         });
 
-        //diff
-
-
-        //IF ID DOES NOT EXIST, MAKE IT ADD FIELD
-        //change editassessmentbutton text to add
         EditAssessmentButton.setOnClickListener(view -> {
             String title = editName.getText().toString();
             String start = editStart.getText().toString();

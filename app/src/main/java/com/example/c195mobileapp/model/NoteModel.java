@@ -4,11 +4,13 @@ public class NoteModel {
     private int noteID;
     private String noteTitle;
     private String noteContent;
+    private int courseID;
 
-    public NoteModel(int noteID, String noteTitle, String noteContent) {
+    public NoteModel(int noteID, String noteTitle, String noteContent, int courseID) {
         this.noteID = noteID;
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
+        this.courseID = courseID;
     }
 
     public int getNoteID() {
@@ -33,5 +35,13 @@ public class NoteModel {
 
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 }

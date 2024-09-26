@@ -60,11 +60,10 @@ public class AssessmentController extends AppCompatActivity {
                     "Assessment End: " + model.getAssessmentEnd() + "\n" +
                     "Type: " + (model.getAssessmentType() ? "Objective" : "Performance");
 
-            // Creating SpannableString and making the title bold
             SpannableString spannableString = new SpannableString(text);
             spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 17, model.getAssessmentTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            // Adding formatted string to the list
             formattedAssessments.add(spannableString);
         }
 
@@ -75,7 +74,7 @@ public class AssessmentController extends AppCompatActivity {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         } else {
             for (AssessmentModel model : allAppointments) {
-                Log.d("AssessmentsController", "Appointment: " + model.toString());
+                Log.d("AssessmentController", "Appointment: " + model.toString());
             }
         }
 

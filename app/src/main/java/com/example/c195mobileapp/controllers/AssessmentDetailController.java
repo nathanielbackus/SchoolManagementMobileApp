@@ -96,35 +96,5 @@ public class AssessmentDetailController extends AppCompatActivity {
             }
         });
 
-        EditAssessmentButton.setOnClickListener(view -> {
-            String title = editName.getText().toString();
-            String start = editStart.getText().toString();
-            String end = editEnd.getText().toString();
-            boolean isObjective = switchPerfObj.isChecked();
-
-            if (assessmentID != -1) {
-                // Update existing assessment
-                AssessmentModel updatedAssessment = new AssessmentModel(assessmentID, title, start, end, isObjective);
-                boolean success = assessmentDAO.updateAssessment(updatedAssessment);
-                if (success) {
-                    Toast.makeText(AssessmentDetailController.this, "Assessment updated successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AssessmentDetailController.this, "Failed to update assessment", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                // Add new assessment
-                AssessmentModel newAssessment = new AssessmentModel(-1, title, start, end, isObjective);
-                boolean success = assessmentDAO.addAssessment(newAssessment);
-                if (success) {
-                    Toast.makeText(AssessmentDetailController.this, "Assessment added successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AssessmentDetailController.this, "Failed to add assessment", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            // After success, go back to AssessmentController
-            Intent intent1 = new Intent(AssessmentDetailController.this, AssessmentController.class);
-            startActivity(intent1);
-        });
     }
 }

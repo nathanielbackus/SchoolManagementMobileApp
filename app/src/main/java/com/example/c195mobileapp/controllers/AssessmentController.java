@@ -62,7 +62,9 @@ public class AssessmentController extends AppCompatActivity {
 
             SpannableString spannableString = new SpannableString(text);
             spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 17, model.getAssessmentTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            int titleLength = model.getAssessmentTitle().length();
+            spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 17, 17 + titleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 
             formattedAssessments.add(spannableString);
         }

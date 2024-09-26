@@ -33,6 +33,7 @@ public class MentorDetailController extends AppCompatActivity {
         editName = findViewById(R.id.editName);
         editEmail = findViewById(R.id.editEmail);
         editPhone = findViewById(R.id.editPhone);
+        Header = findViewById(R.id.Header);
 
         DataBaseHelper dbHelper = new DataBaseHelper(MentorDetailController.this);
         mentorDAO = new MentorDAO(dbHelper);
@@ -84,25 +85,6 @@ public class MentorDetailController extends AppCompatActivity {
                     Toast.makeText(MentorDetailController.this, "Failed to add mentor", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-        EditMentorButton.setOnClickListener(view -> {
-            String name = editName.getText().toString();
-            String email = editEmail.getText().toString();
-            String phone = editPhone.getText().toString();
-
-            if (mentorID != -1) {
-                MentorModel updatedMentor = new MentorModel(mentorID, name, email, phone);
-                boolean success = mentorDAO.updateMentor(updatedMentor);
-                if (success) {
-                    Toast.makeText(MentorDetailController.this, "Mentor updated successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MentorDetailController.this, "Failed to update mentor", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            Intent intent1 = new Intent(MentorDetailController.this, MentorController.class);
-            startActivity(intent1);
         });
     }
 }

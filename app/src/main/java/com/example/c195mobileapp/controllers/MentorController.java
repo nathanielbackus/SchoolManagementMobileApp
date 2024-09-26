@@ -76,6 +76,15 @@ public class MentorController extends AppCompatActivity {
             }
         });
 
+        ToAddMentorActivity = (Button) findViewById(R.id.ToAddMentorActivity);
+        ToAddMentorActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MentorController.this, MentorDetailController.class);
+                startActivity(intent);
+            }
+        });
+
         mentorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

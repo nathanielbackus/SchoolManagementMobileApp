@@ -21,23 +21,68 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     // called the first time a database is accessed. code in here creates a new databse
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createAssessmentTable = "CREATE TABLE ASSESSMENT_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, ASSESSMENT_TITLE TEXT, START_DATE TEXT, END_DATE TEXT, ASSESSMENT_TYPE INTEGER)";
-        String createNoteTable = "CREATE TABLE NOTE_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, NOTE_TITLE TEXT, NOTE_CONTENT TEXT)";
-        String createCourseTable = "CREATE TABLE COURSE_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, COURSE_TITLE TEXT, START_DATE TEXT, END_DATE TEXT, STATUS TEXT, MENTOR TEXT)";
-        String createTermTable = "CREATE TABLE TERM_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, TERM_TITLE TEXT, START_DATE TEXT, END_DATE TEXT)";
-        String createMentorTable = "CREATE TABLE MENTOR_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, MENTOR_NAME TEXT, MENTOR_EMAIL TEXT, MENTOR_PHONE TEXT)";
+        String createAssessmentTable =
+                "CREATE TABLE ASSESSMENT_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "ASSESSMENT_TITLE TEXT, " +
+                        "START_DATE TEXT, " +
+                        "END_DATE TEXT, " +
+                        "ASSESSMENT_TYPE INTEGER)";
+
+        String createNoteTable =
+                "CREATE TABLE NOTE_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "NOTE_TITLE TEXT, " +
+                        "NOTE_CONTENT TEXT)";
+
+        String createCourseTable =
+                "CREATE TABLE COURSE_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "COURSE_TITLE TEXT, " +
+                        "START_DATE TEXT, " +
+                        "END_DATE TEXT, " +
+                        "STATUS TEXT, " +
+                        "MENTOR_ID INTEGER, " +
+                        "ASSOCIATED_ASSESSMENTS TEXT, " +
+                        "FOREIGN KEY (MENTOR_ID) REFERENCES MENTOR_TABLE(ID))";
+
+        String createCourseAssessmentTable =
+                "CREATE TABLE COURSE_ASSESSMENT_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "COURSE_ID INTEGER, " +
+                        "ASSESSMENT_ID INTEGER, " +
+                        "FOREIGN KEY (COURSE_ID) REFERENCES COURSE_TABLE(ID) ON DELETE CASCADE, " +
+                        "FOREIGN KEY (ASSESSMENT_ID) REFERENCES ASSESSMENT_TABLE(ID) ON DELETE CASCADE)";
+
+        String createTermTable =
+                "CREATE TABLE TERM_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "TERM_TITLE TEXT, " +
+                        "START_DATE TEXT, " +
+                        "END_DATE TEXT)";
+
+        String createMentorTable =
+                "CREATE TABLE MENTOR_TABLE (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "MENTOR_NAME TEXT, " +
+                        "MENTOR_EMAIL TEXT, " +
+                        "MENTOR_PHONE TEXT)";
+
         db.execSQL(createAssessmentTable);
         db.execSQL(createNoteTable);
         db.execSQL(createCourseTable);
+        db.execSQL(createCourseAssessmentTable);
         db.execSQL(createTermTable);
         db.execSQL(createMentorTable);
     }
+
     // this is called if the database version number changes. prevents errors when you change database design.
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS ASSESSMENT_TABLE");
         db.execSQL("DROP TABLE IF EXISTS NOTE_TABLE");
         db.execSQL("DROP TABLE IF EXISTS COURSE_TABLE");
+        db.execSQL("DROP TABLE IF EXISTS COURSE_ASSESSMENT_TABLE");
         db.execSQL("DROP TABLE IF EXISTS TERM_TABLE");
         db.execSQL("DROP TABLE IF EXISTS MENTOR_TABLE");
         onCreate(db);

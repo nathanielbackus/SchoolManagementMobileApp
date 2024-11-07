@@ -48,7 +48,7 @@ public class AssessmentDAO {
     }
 
 
-    public List<AssessmentModel> getAllAppointments() {
+    public List<AssessmentModel> getAllAssessments() {
         List<AssessmentModel> assessmentReturnList = new ArrayList<>();
         String queryString = "SELECT * FROM ASSESSMENT_TABLE";
         SQLiteDatabase db = dbHelper.getReadableDatabase();

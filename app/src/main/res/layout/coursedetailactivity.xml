@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noteListView" />
+        app:layout_constraintTop_toBottomOf="@id/assessmentListView" />
 
     <TextView
         android:id="@+id/Header"
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/StartDate"
-        android:inputType="date"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@id/editEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/EndDate"
-        android:inputType="date"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/mentorSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -88,30 +88,91 @@
 
     <ListView
         android:id="@+id/assessmentListView"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
+        android:layout_width="397dp"
+        android:layout_height="204dp"
         android:choiceMode="multipleChoice"
-        app:layout_constraintBottom_toTopOf="@id/noteListView"
+        app:layout_constraintBottom_toTopOf="@+id/AddCourseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mentorSpinner" />
+        app:layout_constraintTop_toBottomOf="@id/statusRG" />
 
     <Spinner
         android:id="@+id/mentorSpinner"
+        android:layout_width="251dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@id/statusRG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/mentorLabel"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+
+    <TextView
+        android:id="@+id/mentorLabel"
         android:layout_width="wrap_content"
-        android:layout_height="41dp"
+        android:layout_height="wrap_content"
+        android:text="Mentor:"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/statusRG"
+        app:layout_constraintEnd_toStartOf="@+id/mentorSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editEnd" />
+
+    <RadioGroup
+        android:id="@+id/statusRG"
+        android:layout_width="389dp"
+        android:layout_height="102dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/assessmentListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+        app:layout_constraintTop_toBottomOf="@id/mentorSpinner">
 
-    <ListView
-        android:id="@+id/noteListView"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        app:layout_constraintBottom_toTopOf="@+id/AddCourseButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assessmentListView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/inProgRB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:layout_weight="1"
+                android:text="In Progress" />
+
+            <RadioButton
+                android:id="@+id/completedRB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:layout_weight="1"
+                android:text="Completed" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/droppedRB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:layout_weight="1"
+                android:text="Dropped" />
+
+            <RadioButton
+                android:id="@+id/planToTakeRB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:layout_weight="1"
+                android:text="Plan to Take" />
+        </LinearLayout>
+
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

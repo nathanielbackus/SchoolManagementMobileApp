@@ -47,7 +47,7 @@ public class AssessmentController extends AppCompatActivity {
         assessmentDAO = new AssessmentDAO(dbHelper);
 
         // Get data from database using DAO
-        List<AssessmentModel> allAppointments = assessmentDAO.getAllAppointments();
+        List<AssessmentModel> allAppointments = assessmentDAO.getAllAssessments();
 
         // Prepare the array for SpannableString
         List<SpannableString> formattedAssessments = new ArrayList<>();

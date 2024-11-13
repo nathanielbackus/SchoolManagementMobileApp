@@ -61,7 +61,8 @@ public class CourseController extends AppCompatActivity {
 
         // Set the ArrayAdapter with formatted text
         courseArrayAdapter = new ArrayAdapter<>(CourseController.this, android.R.layout.simple_list_item_1, formattedCourses);
-
+        courseListView.setAdapter(courseArrayAdapter);
+        
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -19,7 +19,7 @@ public class AssessmentDAO {
 
     public boolean deleteAssessment(AssessmentModel assessmentModel) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int result = db.delete("ASSESSMENT_TABLE", "ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
+        int result = db.delete("ASSESSMENT_TABLE", "ASSESSMENT_ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
         db.close();
         return result > 0;
     }
@@ -42,7 +42,7 @@ public class AssessmentDAO {
         cv.put("START_DATE", assessmentModel.getAssessmentStart());
         cv.put("END_DATE", assessmentModel.getAssessmentEnd());
         cv.put("ASSESSMENT_TYPE", assessmentModel.getAssessmentType() ? 1 : 0);
-        int update = db.update("ASSESSMENT_TABLE", cv, "ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
+        int update = db.update("ASSESSMENT_TABLE", cv, "ASSESSMENT_ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
         db.close();
         return update > 0;
     }

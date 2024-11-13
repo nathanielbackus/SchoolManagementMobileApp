@@ -13,14 +13,31 @@ import java.util.List;
 
 public class CourseDAO {
     private final SQLiteOpenHelper dbHelper;
+
     public CourseDAO(SQLiteOpenHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
+
     public boolean deleteCourse(CourseModel courseModel) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int result = db.delete("COURSE_TABLE", "ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
+        int result = db.delete("COURSE_TABLE", "COURSE_ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
         db.close();
         return result > 0;
+    }
+
+    private List<Integer> getAssociatedAssessmentIDsForCourse(int courseId, SQLiteDatabase db) {
+        List<Integer> assessmentIDs = new ArrayList<>();
+        String query = "SELECT ASSESSMENT_ID FROM COURSE_ASSESSMENT_TABLE WHERE COURSE_ID = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+        if (cursor.moveToFirst()) {
+            do {
+                int assessmentID = cursor.getInt(cursor.getColumnIndexOrThrow("ASSESSMENT_ID"));
+                assessmentIDs.add(assessmentID);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return assessmentIDs;
     }
 
     public List<CourseModel> getAllCourses() {
@@ -31,16 +48,14 @@ public class CourseDAO {
 
         if (cursor.moveToFirst()) {
             do {
-                int courseID = cursor.getInt(cursor.getColumnIndexOrThrow("ID"));
+                int courseID = cursor.getInt(cursor.getColumnIndexOrThrow("COURSE_ID"));
                 String courseTitle = cursor.getString(cursor.getColumnIndexOrThrow("COURSE_TITLE"));
                 String courseStart = cursor.getString(cursor.getColumnIndexOrThrow("START_DATE"));
                 String courseEnd = cursor.getString(cursor.getColumnIndexOrThrow("END_DATE"));
                 int status = cursor.getInt(cursor.getColumnIndexOrThrow("STATUS"));
                 int mentorID = cursor.getInt(cursor.getColumnIndexOrThrow("MENTOR_ID"));
-                String associatedAssessmentsStr = cursor.getString(cursor.getColumnIndexOrThrow("ASSOCIATED_ASSESSMENTS"));
 
-                CourseModel courseModel = new CourseModel(courseID, courseTitle, courseStart, courseEnd, status, mentorID, associatedAssessmentsStr);
-                courseModel.setAssociatedAssessmentIDsFromString(associatedAssessmentsStr);
+                CourseModel courseModel = new CourseModel(courseID, courseTitle, courseStart, courseEnd, status, mentorID);
 
                 courseReturnList.add(courseModel);
             } while (cursor.moveToNext());
@@ -52,7 +67,7 @@ public class CourseDAO {
     }
 
 
-    public boolean addCourse(CourseModel courseModel) {
+    public boolean addCourse(CourseModel courseModel, List<Integer> associatedAssessmentIDs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         try {
@@ -61,19 +76,30 @@ public class CourseDAO {
             cv.put("START_DATE", courseModel.getCourseStart());
             cv.put("END_DATE", courseModel.getCourseEnd());
             cv.put("STATUS", courseModel.getStatus());
-            cv.put("MENTOR_ID", courseModel.getMentorid());
-            cv.put("ASSOCIATED_ASSESSMENTS", courseModel.getAssociatedAssessmentIDsAsString());
+            cv.put("MENTOR_ID", courseModel.getMentorID());
 
             long courseId = db.insert("COURSE_TABLE", null, cv);
-            return courseId != -1;
+            if (courseId == -1) {
+                return false;
+            }
+            for (Integer assessmentID : associatedAssessmentIDs) {
+                ContentValues assessmentCV = new ContentValues();
+                assessmentCV.put("COURSE_ID", courseId);
+                assessmentCV.put("ASSESSMENT_ID", assessmentID);
+                //query for all assessment ids belonging to course id
+                long assessmentInsert = db.insert("COURSE_ASSESSMENT_TABLE", null, assessmentCV);
+                if (assessmentInsert == -1) {
+                    return false;
+                }
+            }
         } finally {
             db.close();
         }
+        return true;
     }
 
 
-
-    public boolean updateCourse(CourseModel courseModel) {
+    public boolean updateCourse(CourseModel courseModel, List<Integer> associatedAssessmentIDs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         try {
@@ -82,15 +108,28 @@ public class CourseDAO {
             cv.put("START_DATE", courseModel.getCourseStart());
             cv.put("END_DATE", courseModel.getCourseEnd());
             cv.put("STATUS", courseModel.getStatus());
-            cv.put("MENTOR_ID", courseModel.getMentorid());
-            cv.put("ASSOCIATED_ASSESSMENTS", courseModel.getAssociatedAssessmentIDsAsString());
+            cv.put("MENTOR_ID", courseModel.getMentorID());
 
-            int rowsAffected = db.update("COURSE_TABLE", cv, "ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
-            return rowsAffected > 0;
+            int rowsAffected = db.update("COURSE_TABLE", cv, "COURSE_ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
+            if (rowsAffected <= 0) {
+                return false;
+            }
+            db.delete("COURSE_ASSESSMENT_TABLE", "COURSE_ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
+            for (Integer assessmentID : associatedAssessmentIDs) {
+                ContentValues assessmentCV = new ContentValues();
+                assessmentCV.put("COURSE_ID", courseModel.getCourseID());
+                assessmentCV.put("ASSESSMENT_ID", assessmentID);
+                long assessmentInsert = db.insert("COURSE_ASSESSMENT_TABLE", null, assessmentCV);
+                if (assessmentInsert == -1) {
+                    return false;
+                }
+            }
         } finally {
             db.close();
         }
+        return true;
     }
+
 
 
 

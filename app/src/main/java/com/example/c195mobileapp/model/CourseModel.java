@@ -8,9 +8,9 @@ public class CourseModel {
     private String courseStart;
     private String courseEnd;
     private int status;
-    private int mentorID;
+    private int mentorID; // Store assessment IDs related to this course
 
-    // Constructor
+    // Constructor without associated assessments
     public CourseModel(int courseID, String courseTitle, String courseStart, String courseEnd, int status, int mentorID) {
         this.courseID = courseID;
         this.courseTitle = courseTitle;
@@ -68,16 +68,6 @@ public class CourseModel {
     public void setMentorID(int mentorID) {
         this.mentorID = mentorID;
     }
-
-    // Placeholder methods for assessments; fetches should occur in DAO methods instead
-    public List<Integer> getAssociatedAssessmentIDs() {
-        // To be implemented in the DAO layer as needed
-        throw new UnsupportedOperationException("Use DAO methods to fetch associated assessments.");
-    }
-
-    public void setAssociatedAssessments(List<Integer> associatedAssessmentIDs) {
-        // To be implemented in the DAO layer as needed
-        throw new UnsupportedOperationException("Use DAO methods to set associated assessments.");
-    }
-//maybe a check to find out if they are within dates
 }
+
+//maybe a check to find out if they are within dates

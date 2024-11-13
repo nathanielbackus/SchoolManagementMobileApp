@@ -18,7 +18,7 @@ public class MentorDAO {
 
     public boolean deleteMentor(MentorModel mentorModel){
         SQLiteDatabase db= dbHelper.getWritableDatabase();
-        int result = db.delete("MENTOR_TABLE", "ID = ?", new String[]{String.valueOf(mentorModel.getMentorID())});
+        int result = db.delete("MENTOR_TABLE", "MENTOR_ID = ?", new String[]{String.valueOf(mentorModel.getMentorID())});
         db.close();
         return result > 0;
     }
@@ -40,7 +40,7 @@ public class MentorDAO {
         cv.put("MENTOR_NAME", mentorModel.getMentorName());
         cv.put("MENTOR_EMAIL", mentorModel.getMentorEmail());
         cv.put("MENTOR_PHONE", mentorModel.getMentorPhone());
-        int update = db.update("MENTOR_TABLE", cv, "ID = ?", new String[]{String.valueOf(mentorModel.getMentorID())});
+        int update = db.update("MENTOR_TABLE", cv, "MENTOR_ID = ?", new String[]{String.valueOf(mentorModel.getMentorID())});
         db.close();
         return update > 0;
     }

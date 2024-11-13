@@ -38,8 +38,8 @@ public class CourseDetailController extends AppCompatActivity {
     Spinner mentorSpinner;
     MentorDAO mentorDAO;
     AssessmentDAO assessmentDAO;
-    ArrayAdapter<SpannableString> mentorArrayAdapter;
-    ArrayAdapter<SpannableString> assessmentArrayAdapter;
+    ArrayAdapter<MentorModel> mentorArrayAdapter;
+    ArrayAdapter<AssessmentModel> assessmentArrayAdapter;
     RadioGroup statusRG;
     int courseID = -1;
     CourseDAO courseDAO;
@@ -69,12 +69,7 @@ public class CourseDetailController extends AppCompatActivity {
         DataBaseHelper dbHelper = new DataBaseHelper(CourseDetailController.this);
         mentorDAO = new MentorDAO(dbHelper);
         List<MentorModel> allMentors = mentorDAO.getAllMentors();
-        List<SpannableString> spinnerMentorList = new ArrayList<>();
-        for (MentorModel model : allMentors){
-            SpannableString spannableString = new SpannableString(model.getMentorName());
-            spinnerMentorList.add(spannableString);
-        }
-        mentorArrayAdapter = new ArrayAdapter<>(CourseDetailController.this, android.R.layout.simple_spinner_item, spinnerMentorList);
+        mentorArrayAdapter = new ArrayAdapter<>(CourseDetailController.this, android.R.layout.simple_spinner_item, allMentors);
         mentorArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mentorSpinner.setAdapter(mentorArrayAdapter);
 
@@ -83,18 +78,16 @@ public class CourseDetailController extends AppCompatActivity {
         assessmentListView = findViewById(R.id.assessmentListView);
         assessmentDAO = new AssessmentDAO(dbHelper);
         List<AssessmentModel> allAssessments = assessmentDAO.getAllAssessments();
-        List<SpannableString> assessmentList = new ArrayList<>();
-        for (AssessmentModel model : allAssessments) {
-            SpannableString spannableString = new SpannableString(model.getAssessmentTitle());
-            assessmentList.add(spannableString);
-        }
-        assessmentArrayAdapter = new ArrayAdapter<>(CourseDetailController.this, android.R.layout.simple_list_item_multiple_choice, assessmentList);
+        assessmentArrayAdapter = new ArrayAdapter<>(CourseDetailController.this, android.R.layout.simple_list_item_multiple_choice, allAssessments);
         assessmentListView.setAdapter(assessmentArrayAdapter);
 
 
         statusRG = findViewById(R.id.statusRG);
         Intent intent = getIntent();
         courseID = intent.getIntExtra("courseId", -1);
+
+        //COURSE DB
+        courseDAO = new CourseDAO(dbHelper);
 
 
         //populate data stuff
@@ -121,7 +114,8 @@ public class CourseDetailController extends AppCompatActivity {
             String start = editStart.getText().toString();
             String end = editEnd.getText().toString();
             int status = statusRG.getCheckedRadioButtonId(); // do we need extra stuff i think we can just store as an int
-            int mentor = ((MentorModel) mentorSpinner.getSelectedItem()).getMentorID();
+            MentorModel selectedMentor = (MentorModel) mentorSpinner.getSelectedItem();
+            int mentorID = selectedMentor.getMentorID();
             SparseBooleanArray checkedItems = assessmentListView.getCheckedItemPositions();
             List<Integer> associatedAssessmentIDs = new ArrayList<>();
 
@@ -134,8 +128,8 @@ public class CourseDetailController extends AppCompatActivity {
 
             //update course stuff
             if (courseID != -1) {
-                CourseModel updatedCourse = new CourseModel(courseID, courseTitle, start, end, status, mentor, associatedAssessmentIDs);
-                boolean success = courseDAO.updateCourse(updatedCourse);
+                CourseModel updatedCourse = new CourseModel(courseID, courseTitle, start, end, status, mentorID);
+                boolean success = courseDAO.updateCourse(updatedCourse, associatedAssessmentIDs);//addassociatedassessmentids
                 if (success) {
                     Intent intent2 = new Intent(CourseDetailController.this, CourseController.class);
                     startActivity(intent2);
@@ -144,8 +138,8 @@ public class CourseDetailController extends AppCompatActivity {
                 }
                 //add course stuff
             } else {
-                CourseModel newCourse = new CourseModel(-1, courseTitle, start, end, status, mentor, associatedAssessmentIDs);
-                boolean success = courseDAO.addCourse(newCourse);
+                CourseModel newCourse = new CourseModel(-1, courseTitle, start, end, status, mentorID);
+                boolean success = courseDAO.addCourse(newCourse, associatedAssessmentIDs);
                 if (success) {
                     Intent intent3 = new Intent(CourseDetailController.this, CourseController.class);
                     startActivity(intent3);

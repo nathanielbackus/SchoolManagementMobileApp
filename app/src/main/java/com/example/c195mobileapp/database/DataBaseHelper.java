@@ -23,7 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createAssessmentTable =
                 "CREATE TABLE ASSESSMENT_TABLE (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "ASSESSMENT_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "ASSESSMENT_TITLE TEXT, " +
                         "START_DATE TEXT, " +
                         "END_DATE TEXT, " +
@@ -31,19 +31,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String createNoteTable =
                 "CREATE TABLE NOTE_TABLE (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "NOTE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "NOTE_TITLE TEXT, " +
                         "NOTE_CONTENT TEXT)";
 
         String createCourseTable =
                 "CREATE TABLE COURSE_TABLE (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "COURSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "COURSE_TITLE TEXT, " +
                         "START_DATE TEXT, " +
                         "END_DATE TEXT, " +
                         "STATUS TEXT, " +
                         "MENTOR_ID INTEGER, " +
-                        "ASSOCIATED_ASSESSMENTS TEXT, " +
                         "FOREIGN KEY (MENTOR_ID) REFERENCES MENTOR_TABLE(ID))";
 
         String createCourseAssessmentTable =
@@ -56,14 +55,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String createTermTable =
                 "CREATE TABLE TERM_TABLE (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "TERM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "TERM_TITLE TEXT, " +
                         "START_DATE TEXT, " +
                         "END_DATE TEXT)";
 
         String createMentorTable =
                 "CREATE TABLE MENTOR_TABLE (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "MENTOR_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "MENTOR_NAME TEXT, " +
                         "MENTOR_EMAIL TEXT, " +
                         "MENTOR_PHONE TEXT)";

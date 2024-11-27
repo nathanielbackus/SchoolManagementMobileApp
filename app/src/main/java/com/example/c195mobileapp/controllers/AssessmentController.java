@@ -38,40 +38,27 @@ public class AssessmentController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // Set layout
         setContentView(R.layout.assessmentsactivity);
         assessmentListView = findViewById(R.id.assessmentListView);
-
-        // Initialize the DAO by passing the database helper
         DataBaseHelper dbHelper = new DataBaseHelper(AssessmentController.this);
         assessmentDAO = new AssessmentDAO(dbHelper);
-
-        // Get data from database using DAO
         List<AssessmentModel> allAppointments = assessmentDAO.getAllAssessments();
-
-        // Prepare the array for SpannableString
         List<SpannableString> formattedAssessments = new ArrayList<>();
 
-        // Format each item using SpannableString
         for (AssessmentModel model : allAppointments) {
-            // Creating a string for display
             String text = "Assessment Title: " + model.getAssessmentTitle() + "\n" +
                     "Assessment Start: " + model.getAssessmentStart() + "\n" +
-                    "Assessment End: " + model.getAssessmentEnd() + "\n" +
-                    "Type: " + (model.getAssessmentType() ? "Objective" : "Performance");
+                    "Assessment End: " + model.getAssessmentEnd();
 
             SpannableString spannableString = new SpannableString(text);
             spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             int titleLength = model.getAssessmentTitle().length();
             spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 17, 17 + titleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
             formattedAssessments.add(spannableString);
         }
 
-        // Set the ArrayAdapter with formatted text
+        //toast a warning if no data found, also set adapters
         appointmentArrayAdapter = new ArrayAdapter<>(AssessmentController.this, android.R.layout.simple_list_item_1, formattedAssessments);
-
         if (allAppointments == null || allAppointments.isEmpty()) {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         } else {
@@ -79,8 +66,6 @@ public class AssessmentController extends AppCompatActivity {
                 Log.d("AssessmentController", "Appointment: " + model.toString());
             }
         }
-
-        // Set the adapter to the ListView
         assessmentListView.setAdapter(appointmentArrayAdapter);
 
         // Click to go back to main menu

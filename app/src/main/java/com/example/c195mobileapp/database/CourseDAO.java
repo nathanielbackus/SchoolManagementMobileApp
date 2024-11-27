@@ -18,17 +18,18 @@ public class CourseDAO {
         this.dbHelper = dbHelper;
     }
 
-    public boolean deleteCourse(CourseModel courseModel) {
+    public boolean deleteCourse(int courseID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int result = db.delete("COURSE_TABLE", "COURSE_ID = ?", new String[]{String.valueOf(courseModel.getCourseID())});
+        int result = db.delete("COURSE_TABLE", "COURSE_ID = ?", new String[]{String.valueOf(courseID)});
         db.close();
         return result > 0;
     }
 
-    private List<Integer> getAssociatedAssessmentIDsForCourse(int courseId, SQLiteDatabase db) {
+    public List<Integer> getAssociatedAssessmentIDs(int courseID) {
         List<Integer> assessmentIDs = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT ASSESSMENT_ID FROM COURSE_ASSESSMENT_TABLE WHERE COURSE_ID = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseID)});
         if (cursor.moveToFirst()) {
             do {
                 int assessmentID = cursor.getInt(cursor.getColumnIndexOrThrow("ASSESSMENT_ID"));
@@ -36,6 +37,7 @@ public class CourseDAO {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.close();
 
         return assessmentIDs;
     }

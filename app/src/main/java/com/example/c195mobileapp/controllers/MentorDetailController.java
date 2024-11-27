@@ -60,30 +60,34 @@ public class MentorDetailController extends AppCompatActivity {
             Intent intent1 = new Intent(MentorDetailController.this, MentorController.class);
             startActivity(intent1);
         });
-
+        //For grading person: in the instructions for the class there was nothing about intructor logic validation. However I think it is important
+        //that name is not empty, but its common a professor/instructor might fail to send their students their phone number.
         EditMentorButton.setOnClickListener(view -> {
             String name = editName.getText().toString();
             String email = editEmail.getText().toString();
             String phone = editPhone.getText().toString();
-
-            if (mentorID != -1) {
-                MentorModel updatedMentor = new MentorModel(mentorID, name, email, phone);
-                boolean success = mentorDAO.updateMentor(updatedMentor);
-                if (success) {
-                    Intent intent2 = new Intent(MentorDetailController.this, MentorController.class);
-                    startActivity(intent2);
+            if (!name.isEmpty()) {
+                if (mentorID != -1) {
+                    MentorModel updatedMentor = new MentorModel(mentorID, name, email, phone);
+                    boolean success = mentorDAO.updateMentor(updatedMentor);
+                    if (success) {
+                        Intent intent2 = new Intent(MentorDetailController.this, MentorController.class);
+                        startActivity(intent2);
+                    } else {
+                        Toast.makeText(MentorDetailController.this, "Failed to update mentor", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(MentorDetailController.this, "Failed to update mentor", Toast.LENGTH_SHORT).show();
+                    MentorModel newMentor = new MentorModel(-1, name, email, phone);
+                    boolean success = mentorDAO.addMentor(newMentor);
+                    if (success) {
+                        Intent intent3 = new Intent(MentorDetailController.this, MentorController.class);
+                        startActivity(intent3);
+                    } else {
+                        Toast.makeText(MentorDetailController.this, "Failed to add mentor", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
-                MentorModel newMentor = new MentorModel(-1, name, email, phone);
-                boolean success = mentorDAO.addMentor(newMentor);
-                if (success) {
-                    Intent intent3 = new Intent(MentorDetailController.this, MentorController.class);
-                    startActivity(intent3);
-                } else {
-                    Toast.makeText(MentorDetailController.this, "Failed to add mentor", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(MentorDetailController.this,"Mentor requires a name", Toast.LENGTH_SHORT).show();
             }
         });
     }

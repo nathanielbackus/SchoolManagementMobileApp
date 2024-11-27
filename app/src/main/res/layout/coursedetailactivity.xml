@@ -6,16 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".controllers.CourseDetailController">
 
-    <Button
-        android:id="@+id/AddCourseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add New Course"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/assessmentListView" />
-
     <TextView
         android:id="@+id/Header"
         android:layout_width="0dp"
@@ -47,37 +37,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
+        android:id="@+id/sdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="52dp"
+        android:text="Start Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <Button
         android:id="@+id/editStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
         android:ems="10"
-        android:hint="@string/StartDate"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@id/editEnd"
+        android:text="JAN 1 2000"
+        android:inputType="date"
+        android:onClick="openDatePicker"
+        app:backgroundTint="#FF465A9A"
+        app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editName" />
+        app:layout_constraintStart_toEndOf="@id/sdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editName"
+        app:rippleColor="@android:color/white" />
 
-    <EditText
+    <TextView
+        android:id="@+id/edTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="52dp"
+        android:text="End Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editStart" />
+
+    <Button
         android:id="@+id/editEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="@string/EndDate"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/mentorSpinner"
+        android:text="JAN 1 2000"
+        android:inputType="date"
+        android:onClick="openDatePicker"
+        app:backgroundTint="#FF465A9A"
+        app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editStart" />
+        app:layout_constraintStart_toEndOf="@id/edTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editStart" />
 
     <EditText
         android:id="@+id/editName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_marginVertical="40dp"
         android:hint="Course Name"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/editStart"
@@ -86,22 +103,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header" />
 
-    <ListView
-        android:id="@+id/assessmentListView"
-        android:layout_width="397dp"
-        android:layout_height="204dp"
-        android:choiceMode="multipleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/AddCourseButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusRG" />
-
     <Spinner
         android:id="@+id/mentorSpinner"
-        android:layout_width="251dp"
-        android:layout_height="56dp"
-        app:layout_constraintBottom_toTopOf="@id/statusRG"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toTopOf="@id/statusSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mentorLabel"
         app:layout_constraintTop_toBottomOf="@id/editEnd" />
@@ -112,67 +118,66 @@
         android:layout_height="wrap_content"
         android:text="Mentor:"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@id/statusRG"
+        app:layout_constraintBottom_toTopOf="@+id/statusSpinner"
         app:layout_constraintEnd_toStartOf="@+id/mentorSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editEnd" />
 
-    <RadioGroup
-        android:id="@+id/statusRG"
-        android:layout_width="389dp"
-        android:layout_height="102dp"
-        android:orientation="horizontal"
+    <Spinner
+        android:id="@+id/statusSpinner"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="5dp"
         app:layout_constraintBottom_toTopOf="@id/assessmentListView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/statusLabel"
+        app:layout_constraintTop_toBottomOf="@id/mentorSpinner" />
+
+    <ListView
+        android:id="@+id/assessmentListView"
+        android:layout_width="397dp"
+        android:layout_height="204dp"
+        android:choiceMode="multipleChoice"
+        app:layout_constraintBottom_toTopOf="@+id/AddCourseButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mentorSpinner">
+        app:layout_constraintTop_toBottomOf="@id/statusSpinner" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+    <Button
+        android:id="@+id/AddCourseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Course"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/deleteCourseButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/assessmentListView" />
 
-            <RadioButton
-                android:id="@+id/inProgRB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:layout_weight="1"
-                android:text="In Progress" />
+    <TextView
+        android:id="@+id/statusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:text="Status:"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/assessmentListView"
+        app:layout_constraintEnd_toStartOf="@+id/statusSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mentorSpinner" />
 
-            <RadioButton
-                android:id="@+id/completedRB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:layout_weight="1"
-                android:text="Completed" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/droppedRB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:layout_weight="1"
-                android:text="Dropped" />
-
-            <RadioButton
-                android:id="@+id/planToTakeRB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="4dp"
-                android:layout_weight="1"
-                android:text="Plan to Take" />
-        </LinearLayout>
-
-    </RadioGroup>
+    <Button
+        android:id="@+id/deleteCourseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Course"
+        android:visibility="gone"
+        android:layout_marginLeft="40dp"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/AddCourseButton"
+        app:layout_constraintTop_toBottomOf="@id/assessmentListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

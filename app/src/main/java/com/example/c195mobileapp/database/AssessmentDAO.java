@@ -17,9 +17,9 @@ public class AssessmentDAO {
         this.dbHelper = dbHelper;
     }
 
-    public boolean deleteAssessment(AssessmentModel assessmentModel) {
+    public boolean deleteAssessment(int assessmentID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int result = db.delete("ASSESSMENT_TABLE", "ASSESSMENT_ID = ?", new String[]{String.valueOf(assessmentModel.getAssessmentID())});
+        int result = db.delete("ASSESSMENT_TABLE", "ASSESSMENT_ID = ?", new String[]{String.valueOf(assessmentID)});
         db.close();
         return result > 0;
     }

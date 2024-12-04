@@ -11,48 +11,131 @@
         android:layout_width="0dp"
         android:layout_height="58dp"
         android:background="#465A9A"
-        android:paddingTop="20px"
+        android:paddingTop="40px"
+        android:paddingRight="20px"
         android:text="Add Term"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/BackButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/BackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
         android:backgroundTint="#465A9A"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         android:text="back"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="@+id/Header"
-        app:layout_constraintStart_toStartOf="@+id/Header"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/sdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="274dp" />
+        android:layout_marginVertical="52dp"
+        android:text="Start Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <Button
+        android:id="@+id/editStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:ems="10"
+        android:text="JAN 1 2000"
+        android:inputType="date"
+        android:onClick="openDatePicker"
+        app:backgroundTint="#FF465A9A"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editName"
+        app:rippleColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/edTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="52dp"
+        android:text="End Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editStart" />
+
+    <Button
+        android:id="@+id/editEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:text="JAN 1 2000"
+        android:inputType="date"
+        android:onClick="openDatePicker"
+        app:backgroundTint="#FF465A9A"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editStart" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_marginVertical="40dp"
+        android:hint="Term Name"
         android:inputType="text"
-        android:text="Name"
-        tools:layout_editor_absoluteX="101dp"
-        tools:layout_editor_absoluteY="70dp" />
+        app:layout_constraintBottom_toTopOf="@+id/editStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+    <ListView
+        android:id="@+id/courseListView"
+        android:layout_width="match_parent"
+        android:layout_height="364dp"
+        android:choiceMode="multipleChoice"
+        app:layout_constraintBottom_toTopOf="@+id/AddTermButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+
+    <Button
+        android:id="@+id/AddTermButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Term"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/DeleteTermButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/courseListView" />
+
+    <Button
+        android:id="@+id/DeleteTermButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Term"
+        android:visibility="gone"
+        android:layout_marginLeft="40dp"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/AddTermButton"
+        app:layout_constraintTop_toBottomOf="@id/courseListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

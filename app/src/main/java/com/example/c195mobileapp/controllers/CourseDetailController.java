@@ -5,14 +5,12 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,7 +49,6 @@ public class CourseDetailController extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private boolean isEditingStartDate = true;
 
-    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -63,6 +60,7 @@ public class CourseDetailController extends AppCompatActivity {
         AddCourseButton = findViewById(R.id.AddCourseButton);
         Header = findViewById(R.id.Header);
         deleteCourseButton = findViewById(R.id.deleteCourseButton);
+        DataBaseHelper dbHelper = new DataBaseHelper(CourseDetailController.this);
 
         deleteCourseButton.setOnClickListener(view -> {
             courseDAO.deleteCourse(courseID);
@@ -92,7 +90,6 @@ public class CourseDetailController extends AppCompatActivity {
 
         //MENTOR STUFF
         mentorSpinner = findViewById(R.id.mentorSpinner);
-        DataBaseHelper dbHelper = new DataBaseHelper(CourseDetailController.this);
         mentorDAO = new MentorDAO(dbHelper);
         List<MentorModel> allMentors = mentorDAO.getAllMentors();
         mentorArrayAdapter = new ArrayAdapter<MentorModel>(CourseDetailController.this, android.R.layout.simple_spinner_item, allMentors) {

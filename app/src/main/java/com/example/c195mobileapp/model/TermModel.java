@@ -47,16 +47,4 @@ public class TermModel {
     public void setTermEnd(String termEnd) {
         this.termEnd = termEnd;
     }
-
-    public void addAssociatedCourse(CourseModel course) {
-        associatedCourses.add(course);
-    }
-
-    public void deleteAssociatedCourse(CourseModel course) {
-        associatedCourses.remove(course);
-    }
-
-    public List<CourseModel> getAllAssociatedCourses() {
-        return associatedCourses;
-    }
 }

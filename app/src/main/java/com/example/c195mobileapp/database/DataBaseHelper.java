@@ -53,6 +53,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         "FOREIGN KEY (COURSE_ID) REFERENCES COURSE_TABLE(ID) ON DELETE CASCADE, " +
                         "FOREIGN KEY (ASSESSMENT_ID) REFERENCES ASSESSMENT_TABLE(ID) ON DELETE CASCADE)";
 
+        String createTermCourseTable =
+                "CREATE TABLE TERM_COURSE_TABLE(" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "TERM_ID INTEGER, " +
+                        "COURSE_ID INTEGER, " +
+                        "FOREIGN KEY (TERM_ID) REFERENCES TERM_TABLE(ID) ON DELETE CASCADE, " +
+                        "FOREIGN KEY (COURSE_ID) REFERENCES COURSE_TABLE(ID) ON DELETE CASCADE)";
+
         String createTermTable =
                 "CREATE TABLE TERM_TABLE (" +
                         "TERM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -71,6 +79,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(createNoteTable);
         db.execSQL(createCourseTable);
         db.execSQL(createCourseAssessmentTable);
+        db.execSQL(createTermCourseTable);
         db.execSQL(createTermTable);
         db.execSQL(createMentorTable);
     }
@@ -82,6 +91,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS NOTE_TABLE");
         db.execSQL("DROP TABLE IF EXISTS COURSE_TABLE");
         db.execSQL("DROP TABLE IF EXISTS COURSE_ASSESSMENT_TABLE");
+        db.execSQL("DROP TABLE IF EXISTS TERM_COURSE_TABLE");
         db.execSQL("DROP TABLE IF EXISTS TERM_TABLE");
         db.execSQL("DROP TABLE IF EXISTS MENTOR_TABLE");
         onCreate(db);

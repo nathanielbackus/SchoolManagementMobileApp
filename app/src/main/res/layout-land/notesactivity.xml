@@ -44,15 +44,15 @@
         app:backgroundTint="#FF465A9A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteListView" />
+        app:layout_constraintStart_toEndOf="@id/noteListView"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
 
     <ListView
         android:id="@+id/noteListView"
-        android:layout_width="401dp"
-        android:layout_height="599dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="600dp"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toStartOf="@id/ToNoteDetailActivity"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Header" />
+        app:layout_constraintTop_toBottomOf="@+id/Header"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

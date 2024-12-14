@@ -131,4 +131,22 @@ public class CourseDAO {
         }
         return true;
     }
+
+    public String getCourseNameById(int courseId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String courseName = "No Assigned Course";
+        Cursor cursor = null;
+        try {
+            String query = "SELECT COURSE_TITLE FROM COURSE_TABLE WHERE COURSE_ID = ?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+            if (cursor.moveToFirst()) {
+                courseName = cursor.getString(cursor.getColumnIndexOrThrow("COURSE_TITLE"));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
+        }
+        return courseName;
+    }
+
 }

@@ -33,6 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE NOTE_TABLE (" +
                         "NOTE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "NOTE_TITLE TEXT, " +
+                        "NOTE_COURSE INTEGER, " +
                         "NOTE_CONTENT TEXT)";
 
         String createCourseTable =

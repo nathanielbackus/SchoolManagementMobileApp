@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".controllers.NoteController">
+    tools:context=".controllers.TermController">
 
     <TextView
         android:id="@+id/Header"
@@ -13,7 +13,7 @@
         android:background="#465A9A"
         android:paddingTop="40px"
         android:paddingRight="20px"
-        android:text="All Notes"
+        android:text="All Terms"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
@@ -37,22 +37,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/ToNoteDetailActivity"
-        android:layout_width="wrap_content"
+        android:id="@+id/ToAddTermActivity"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Add Note"
+        android:text="Add Term"
         app:backgroundTint="#FF465A9A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteListView" />
+        app:layout_constraintStart_toEndOf="@id/termListView"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
 
     <ListView
-        android:id="@+id/noteListView"
-        android:layout_width="401dp"
-        android:layout_height="599dp"
+        android:id="@+id/termListView"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
         android:layout_marginTop="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ToAddTermActivity"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Header" />
+        app:layout_constraintTop_toBottomOf="@+id/Header"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,33 +44,19 @@
         android:ems="10"
         android:hint="Note Name"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/courseSpinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintBottom_toTopOf="@+id/noteContentEditText"
+        app:layout_constraintEnd_toStartOf="@id/courseSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header" />
 
     <Spinner
         android:id="@+id/courseSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toTopOf="@id/noteContentEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editName" />
-
-    <EditText
-        android:id="@+id/noteContentEditText"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:hint="Add Note Content Here"
-        android:gravity="top|left"
-        app:layout_constraintBottom_toTopOf="@+id/AddNoteButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/courseSpinner" />
+        app:layout_constraintEnd_toStartOf="@id/AddNoteButton"
+        app:layout_constraintStart_toEndOf="@id/editName"
+        app:layout_constraintTop_toBottomOf="@id/Header" />
 
     <Button
         android:id="@+id/AddNoteButton"
@@ -78,23 +64,10 @@
         android:layout_height="wrap_content"
         android:text="Add New Note"
         app:backgroundTint="#FF465A9A"
-        app:layout_constraintBottom_toBottomOf="@id/ShareNoteButton"
-        app:layout_constraintEnd_toStartOf="@id/DeleteNoteButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noteContentEditText" />
-
-    <Button
-        android:id="@+id/DeleteNoteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Note"
-        android:visibility="gone"
-        android:layout_marginLeft="40dp"
-        app:backgroundTint="#FF465A9A"
-        app:layout_constraintBottom_toTopOf="@id/ShareNoteButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/AddNoteButton"
-        app:layout_constraintTop_toBottomOf="@id/noteContentEditText" />
+        app:layout_constraintBottom_toTopOf="@id/noteContentEditText"
+        app:layout_constraintEnd_toStartOf="@id/ShareNoteButton"
+        app:layout_constraintStart_toEndOf="@id/courseSpinner"
+        app:layout_constraintTop_toBottomOf="@id/Header" />
 
     <Button
         android:id="@+id/ShareNoteButton"
@@ -102,9 +75,32 @@
         android:layout_height="wrap_content"
         android:text="Share Note"
         app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toTopOf="@id/noteContentEditText"
+        app:layout_constraintEnd_toStartOf="@id/DeleteNoteButton"
+        app:layout_constraintStart_toEndOf="@id/AddNoteButton"
+        app:layout_constraintTop_toBottomOf="@id/Header" />
+
+    <Button
+        android:id="@+id/DeleteNoteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Note"
+        android:visibility="gone"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintBottom_toTopOf="@id/noteContentEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ShareNoteButton"
+        app:layout_constraintTop_toBottomOf="@id/Header" />
+
+    <EditText
+        android:id="@+id/noteContentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:hint="Add Note Content Here"
+        android:gravity="top|left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/AddNoteButton" />
+        app:layout_constraintTop_toBottomOf="@id/courseSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

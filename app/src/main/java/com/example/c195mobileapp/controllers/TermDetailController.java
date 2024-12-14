@@ -60,12 +60,6 @@ public class TermDetailController extends AppCompatActivity {
 
         DataBaseHelper dbHelper = new DataBaseHelper(TermDetailController.this);
 
-        DeleteTermButton.setOnClickListener(view -> {
-            termDAO.deleteTerm(termID);
-            Intent intent1 = new Intent(TermDetailController.this, TermController.class);
-            startActivity(intent1);
-        });
-
         //BACK BUTTON
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +94,6 @@ public class TermDetailController extends AppCompatActivity {
         };
         courseListView.setAdapter(courseArrayAdapter);
 
-
         //TERM DB
         termDAO = new TermDAO(dbHelper);
 
@@ -109,7 +102,6 @@ public class TermDetailController extends AppCompatActivity {
         termID = intent.getIntExtra("termID", -1);
 
         if (termID != -1) {
-
             String termTitle = intent.getStringExtra("termTitle");
             String termStart = intent.getStringExtra("termStart");
             String termEnd = intent.getStringExtra("termEnd");
@@ -155,7 +147,7 @@ public class TermDetailController extends AppCompatActivity {
                     Intent intent2 = new Intent(TermDetailController.this, TermController.class);
                     startActivity(intent2);
                 } else {
-                    Toast.makeText(TermDetailController.this, "Failed to update course", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TermDetailController.this, "Failed to update term", Toast.LENGTH_SHORT).show();
                 }
                 //add course stuff
             } else {
@@ -165,12 +157,30 @@ public class TermDetailController extends AppCompatActivity {
                     Intent intent3 = new Intent(TermDetailController.this, TermController.class);
                     startActivity(intent3);
                 } else {
-                    Toast.makeText(TermDetailController.this, "Failed to add course", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TermDetailController.this, "Failed to add term", Toast.LENGTH_SHORT).show();
                 }
             }
 
         });
 
+        DeleteTermButton.setOnClickListener(view -> {
+            SparseBooleanArray checkedItems = courseListView.getCheckedItemPositions();
+            List<Integer> associatedCourseIDs = new ArrayList<>();
+
+            for (int i = 0; i < courseListView.getCount(); i++) {
+                if (checkedItems.get(i)) {
+                    CourseModel selectedCourse = (CourseModel) courseListView.getItemAtPosition(i);
+                    associatedCourseIDs.add(selectedCourse.getCourseID());
+                }
+            }
+            if (termDAO.getAssociatedCourseIDs(termID).isEmpty() || associatedCourseIDs.isEmpty()) {
+                termDAO.deleteTerm(termID);
+                Intent intent1 = new Intent(TermDetailController.this, TermController.class);
+                startActivity(intent1);
+            } else {
+                Toast.makeText(TermDetailController.this, "Please delete all associated courses before deleting.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void initDatePicker() {

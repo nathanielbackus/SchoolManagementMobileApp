@@ -1,6 +1,9 @@
 package com.example.c195mobileapp.database;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,6 +16,7 @@ import java.util.List;
 
 public class CourseDAO {
     private final SQLiteOpenHelper dbHelper;
+    AlarmManager alarmManager;
 
     public CourseDAO(SQLiteOpenHelper dbHelper) {
         this.dbHelper = dbHelper;

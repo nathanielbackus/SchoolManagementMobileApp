@@ -1,8 +1,14 @@
 package com.example.c195mobileapp.controllers;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +24,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.c195mobileapp.R;
 import com.example.c195mobileapp.database.AssessmentDAO;
 import com.example.c195mobileapp.database.DataBaseHelper;
+import com.example.c195mobileapp.database.NotificationReceiver;
 import com.example.c195mobileapp.model.AssessmentModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AssessmentDetailController extends AppCompatActivity {
     Button BackButton, EditAssessmentButton, deleteAssessmentButton;
@@ -33,12 +45,14 @@ public class AssessmentDetailController extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private boolean isEditingStartDate = true;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.assessmentdetailactivity);
         initDatePicker();
+        createNotificationChannel();
 
         BackButton = findViewById(R.id.BackButton);
         EditAssessmentButton = findViewById(R.id.EditAssessmentButton);
@@ -77,6 +91,8 @@ public class AssessmentDetailController extends AppCompatActivity {
         }
 
         deleteAssessmentButton.setOnClickListener(view -> {
+            cancelNotification(AssessmentDetailController.this, assessmentID);
+            cancelNotification(AssessmentDetailController.this, assessmentID + 1000);
             assessmentDAO.deleteAssessment(assessmentID);
             Intent intent1 = new Intent(AssessmentDetailController.this, AssessmentController.class);
             startActivity(intent1);
@@ -104,18 +120,26 @@ public class AssessmentDetailController extends AppCompatActivity {
             boolean type = switchPerfObj.isChecked();
 
             if (assessmentID != -1) {
+                // Update existing assessment
                 AssessmentModel updatedAssessment = new AssessmentModel(assessmentID, title, start, end, type);
                 boolean success = assessmentDAO.updateAssessment(updatedAssessment);
                 if (success) {
+                    cancelNotification(AssessmentDetailController.this, assessmentID);
+                    cancelNotification(AssessmentDetailController.this, assessmentID + 1000);
+                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Start", getTimeInMillis(start), assessmentID);
+                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment End", getTimeInMillis(end), assessmentID + 1000); // Offset ID
                     Intent intent2 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent2);
                 } else {
                     Toast.makeText(AssessmentDetailController.this, "Failed to update assessment", Toast.LENGTH_SHORT).show();
                 }
             } else {
+                // Add new assessment
                 AssessmentModel newAssessment = new AssessmentModel(-1, title, start, end, type);
                 boolean success = assessmentDAO.addAssessment(newAssessment);
                 if (success) {
+                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Start", getTimeInMillis(start), newAssessment.getAssessmentID());
+                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment End", getTimeInMillis(end), newAssessment.getAssessmentID() + 1000); // Offset ID
                     Intent intent3 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent3);
                 } else {
@@ -148,7 +172,7 @@ public class AssessmentDetailController extends AppCompatActivity {
     }
 
     private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + ", " + year;
+        return getMonthFormat(month) + " " + day + " " + year;
     }
 
     private String getMonthFormat(int month) {
@@ -181,6 +205,7 @@ public class AssessmentDetailController extends AppCompatActivity {
                 return "JAN";
         }
     }
+    //wherever it splits off make a time and date and make tht exportable there
 
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
@@ -190,4 +215,59 @@ public class AssessmentDetailController extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         return makeDateString(day, month, year);
     }
+
+    private void scheduleNotification(Context context, AssessmentModel assessment, String eventType, long timeInMillis, int requestCode) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("titleExtra", eventType);
+        intent.putExtra("messageExtra", "Assessment: " + assessment.getAssessmentTitle());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+    }
+
+    private void cancelNotification(Context context, int requestCode) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "ReminderChannel";
+            String description = "Channel for reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notify", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private long getTimeInMillis(String dateString) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH);
+            Date date = sdf.parse(dateString); // Parse the input date string
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date); // Set the parsed date to the Calendar
+            cal.set(Calendar.HOUR_OF_DAY, 8);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0); // Reset milliseconds
+            return cal.getTimeInMillis();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1; // Return a default value or handle the error appropriately
+        }
+    }
+
 }

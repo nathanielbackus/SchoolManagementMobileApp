@@ -16,9 +16,9 @@ public class MentorDAO {
         this.dbHelper = dbHelper;
     }
 
-    public boolean deleteMentor(MentorModel mentorModel){
+    public boolean deleteMentor(int mentorID){
         SQLiteDatabase db= dbHelper.getWritableDatabase();
-        int result = db.delete("MENTOR_TABLE", "MENTOR_ID = ?", new String[]{String.valueOf(mentorModel.getMentorID())});
+        int result = db.delete("MENTOR_TABLE", "MENTOR_ID = ?", new String[]{String.valueOf(mentorID)});
         db.close();
         return result > 0;
     }

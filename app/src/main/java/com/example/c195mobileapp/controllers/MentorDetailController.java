@@ -2,6 +2,7 @@ package com.example.c195mobileapp.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import com.example.c195mobileapp.database.MentorDAO;
 import com.example.c195mobileapp.model.MentorModel;
 
 public class MentorDetailController extends AppCompatActivity {
-    Button BackButton, EditMentorButton;
+    Button BackButton, EditMentorButton, DeleteButton;
     EditText editName, editEmail, editPhone;
     MentorDAO mentorDAO;
     int mentorID = -1;
@@ -34,9 +35,16 @@ public class MentorDetailController extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         editPhone = findViewById(R.id.editPhone);
         Header = findViewById(R.id.Header);
+        DeleteButton = findViewById(R.id.deleteButton);
 
         DataBaseHelper dbHelper = new DataBaseHelper(MentorDetailController.this);
         mentorDAO = new MentorDAO(dbHelper);
+
+        DeleteButton.setOnClickListener(view -> {
+            mentorDAO.deleteMentor(mentorID);
+            Intent intent1 = new Intent(MentorDetailController.this, MentorController.class);
+            startActivity(intent1);
+        });
 
         Intent intent = getIntent();
         mentorID = intent.getIntExtra("mentorId", -1);
@@ -49,9 +57,11 @@ public class MentorDetailController extends AppCompatActivity {
             editEmail.setText(mentorEmail);
             editPhone.setText(mentorPhone);
 
+            DeleteButton.setVisibility(View.VISIBLE);
             EditMentorButton.setText("Update Mentor");
             Header.setText("Update Mentor");
         } else {
+            DeleteButton.setVisibility(View.GONE);
             EditMentorButton.setText("Add Mentor");
             Header.setText("Add Mentor");
         }

@@ -1,9 +1,15 @@
 package com.example.c195mobileapp.controllers;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.View;
@@ -23,14 +29,19 @@ import com.example.c195mobileapp.R;
 import com.example.c195mobileapp.database.AssessmentDAO;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.database.MentorDAO;
+import com.example.c195mobileapp.database.NotificationReceiver;
 import com.example.c195mobileapp.model.AssessmentModel;
 import com.example.c195mobileapp.model.CourseModel;
 import com.example.c195mobileapp.model.MentorModel;
 import com.example.c195mobileapp.database.CourseDAO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CourseDetailController extends AppCompatActivity {
 
@@ -42,12 +53,13 @@ public class CourseDetailController extends AppCompatActivity {
     AssessmentDAO assessmentDAO;
     ArrayAdapter<MentorModel> mentorArrayAdapter;
     ArrayAdapter<AssessmentModel> assessmentArrayAdapter;
-    RadioGroup statusRG;
     int courseID = -1;
     CourseDAO courseDAO;
     TextView Header;
     private DatePickerDialog datePickerDialog;
     private boolean isEditingStartDate = true;
+    NotificationReceiver receiver = new NotificationReceiver();
+    DataBaseHelper dbHelper = new DataBaseHelper(CourseDetailController.this);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +72,11 @@ public class CourseDetailController extends AppCompatActivity {
         AddCourseButton = findViewById(R.id.AddCourseButton);
         Header = findViewById(R.id.Header);
         deleteCourseButton = findViewById(R.id.deleteCourseButton);
-        DataBaseHelper dbHelper = new DataBaseHelper(CourseDetailController.this);
+        receiver.createNotificationChannel(CourseDetailController.this);
 
         deleteCourseButton.setOnClickListener(view -> {
+            cancelNotification(CourseDetailController.this, courseID);
+            cancelNotification(CourseDetailController.this, courseID + 1000);
             courseDAO.deleteCourse(courseID);
             Intent intent1 = new Intent(CourseDetailController.this, CourseController.class);
             startActivity(intent1);
@@ -79,12 +93,12 @@ public class CourseDetailController extends AppCompatActivity {
         });
 
         editStart.setOnClickListener(view -> {
-            isEditingStartDate = true; // Indicate that the start date is being edited
+            isEditingStartDate = true; // indicate that the start date is being edited
             datePickerDialog.show();
         });
 
         editEnd.setOnClickListener(view -> {
-            isEditingStartDate = false; // Indicate that the end date is being edited
+            isEditingStartDate = false; // indicate that the end date is being edited
             datePickerDialog.show();
         });
 
@@ -95,15 +109,12 @@ public class CourseDetailController extends AppCompatActivity {
         mentorArrayAdapter = new ArrayAdapter<MentorModel>(CourseDetailController.this, android.R.layout.simple_spinner_item, allMentors) {
             @Override
             public View getView(int position, View convertView, android.view.ViewGroup parent) {
-                // Set the mentor name in the Spinner's selected item view
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setText(allMentors.get(position).getMentorName());
                 return textView;
             }
-
             @Override
             public View getDropDownView(int position, View convertView, android.view.ViewGroup parent) {
-                // Set the mentor name in the dropdown view
                 TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
                 textView.setText(allMentors.get(position).getMentorName());
                 return textView;
@@ -142,7 +153,6 @@ public class CourseDetailController extends AppCompatActivity {
         //POPULATE STUFF
         courseID = intent.getIntExtra("courseID", -1);
         if (courseID != -1) {
-
             String courseTitle = intent.getStringExtra("courseTitle");
             String courseStart = intent.getStringExtra("courseStart");
             String courseEnd = intent.getStringExtra("courseEnd");
@@ -172,13 +182,13 @@ public class CourseDetailController extends AppCompatActivity {
             Header.setText("Update Course");
         } else {
             deleteCourseButton.setVisibility(View.GONE);
-            editStart.setText(getTodaysDate());
-            editEnd.setText(getTodaysDate());
+            editStart.setText(dbHelper.getTodaysDate());
+            editEnd.setText(dbHelper.getTodaysDate());
         }
 
 
 
-        //ON ADD
+        //ON ADD COURSE BUTTON CLICK
         AddCourseButton.setOnClickListener(view -> {
             String courseTitle = editName.getText().toString();
             String start = editStart.getText().toString();
@@ -197,25 +207,35 @@ public class CourseDetailController extends AppCompatActivity {
             }
 
             //update course stuff
-            if (courseID != -1) {
-                CourseModel updatedCourse = new CourseModel(courseID, courseTitle, start, end, status, mentorID);
-                boolean success = courseDAO.updateCourse(updatedCourse, associatedAssessmentIDs);//addassociatedassessmentids
-                if (success) {
-                    Intent intent2 = new Intent(CourseDetailController.this, CourseController.class);
-                    startActivity(intent2);
+            if (courseTitle != null) {
+                if (courseID != -1) {
+                    CourseModel updatedCourse = new CourseModel(courseID, courseTitle, start, end, status, mentorID);
+                    boolean success = courseDAO.updateCourse(updatedCourse, associatedAssessmentIDs);//addassociatedassessmentids
+                    if (success) {
+                        cancelNotification(CourseDetailController.this, courseID);
+                        cancelNotification(CourseDetailController.this, courseID + 1000);
+                        scheduleNotification(CourseDetailController.this, updatedCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
+                        scheduleNotification(CourseDetailController.this, updatedCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        Intent intent2 = new Intent(CourseDetailController.this, CourseController.class);
+                        startActivity(intent2);
+                    } else {
+                        Toast.makeText(CourseDetailController.this, "Failed to update course", Toast.LENGTH_SHORT).show();
+                    }
+                    //add course stuff
                 } else {
-                    Toast.makeText(CourseDetailController.this, "Failed to update course", Toast.LENGTH_SHORT).show();
+                    CourseModel newCourse = new CourseModel(-1, courseTitle, start, end, status, mentorID);
+                    boolean success = courseDAO.addCourse(newCourse, associatedAssessmentIDs);
+                    if (success) {
+                        scheduleNotification(CourseDetailController.this, newCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
+                        scheduleNotification(CourseDetailController.this, newCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        Intent intent3 = new Intent(CourseDetailController.this, CourseController.class);
+                        startActivity(intent3);
+                    } else {
+                        Toast.makeText(CourseDetailController.this, "Failed to add course", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                //add course stuff
             } else {
-                CourseModel newCourse = new CourseModel(-1, courseTitle, start, end, status, mentorID);
-                boolean success = courseDAO.addCourse(newCourse, associatedAssessmentIDs);
-                if (success) {
-                    Intent intent3 = new Intent(CourseDetailController.this, CourseController.class);
-                    startActivity(intent3);
-                } else {
-                    Toast.makeText(CourseDetailController.this, "Failed to add course", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(CourseDetailController.this, "Please add a course title", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -225,7 +245,7 @@ public class CourseDetailController extends AppCompatActivity {
     private void initDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = makeDateString(day, month, year);
+            String date = dbHelper.makeDateString(day, month, year);
             if (isEditingStartDate) {
                 editStart.setText(date);
             } else {
@@ -243,47 +263,27 @@ public class CourseDetailController extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + ", " + year;
+    private void scheduleNotification(Context context, CourseModel course, String eventType, long timeInMillis, int requestCode) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("titleExtra", eventType);
+        intent.putExtra("messageExtra", "Course: " + course.getCourseTitle());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
     }
 
-    private String getMonthFormat(int month) {
-        switch (month) {
-            case 1:
-                return "JAN";
-            case 2:
-                return "FEB";
-            case 3:
-                return "MAR";
-            case 4:
-                return "APR";
-            case 5:
-                return "MAY";
-            case 6:
-                return "JUN";
-            case 7:
-                return "JUL";
-            case 8:
-                return "AUG";
-            case 9:
-                return "SEP";
-            case 10:
-                return "OCT";
-            case 11:
-                return "NOV";
-            case 12:
-                return "DEC";
-            default:
-                return "JAN";
+    private void cancelNotification(Context context, int requestCode) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
         }
-    }
-
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
     }
 }

@@ -29,7 +29,6 @@ import com.example.c195mobileapp.model.AssessmentModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -44,6 +43,8 @@ public class AssessmentDetailController extends AppCompatActivity {
     TextView Header;
     private DatePickerDialog datePickerDialog;
     private boolean isEditingStartDate = true;
+    DataBaseHelper dbHelper = new DataBaseHelper(this);
+    NotificationReceiver receiver = new NotificationReceiver();
 
 
     @Override
@@ -52,7 +53,7 @@ public class AssessmentDetailController extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.assessmentdetailactivity);
         initDatePicker();
-        createNotificationChannel();
+        receiver.createNotificationChannel(AssessmentDetailController.this);
 
         BackButton = findViewById(R.id.BackButton);
         EditAssessmentButton = findViewById(R.id.EditAssessmentButton);
@@ -62,8 +63,6 @@ public class AssessmentDetailController extends AppCompatActivity {
         switchPerfObj = findViewById(R.id.switchPerfObj);
         Header = findViewById(R.id.Header);
         deleteAssessmentButton = findViewById(R.id.deleteAssessmentButton);
-
-        DataBaseHelper dbHelper = new DataBaseHelper(AssessmentDetailController.this);
         assessmentDAO = new AssessmentDAO(dbHelper);
 
         Intent intent = getIntent();
@@ -85,8 +84,8 @@ public class AssessmentDetailController extends AppCompatActivity {
         } else {
             EditAssessmentButton.setText("Add");
             Header.setText("Add Assessment");
-            editStart.setText(getTodaysDate());
-            editEnd.setText(getTodaysDate());
+            editStart.setText(dbHelper.getTodaysDate());
+            editEnd.setText(dbHelper.getTodaysDate());
             deleteAssessmentButton.setVisibility(View.GONE);
         }
 
@@ -120,26 +119,24 @@ public class AssessmentDetailController extends AppCompatActivity {
             boolean type = switchPerfObj.isChecked();
 
             if (assessmentID != -1) {
-                // Update existing assessment
                 AssessmentModel updatedAssessment = new AssessmentModel(assessmentID, title, start, end, type);
                 boolean success = assessmentDAO.updateAssessment(updatedAssessment);
                 if (success) {
                     cancelNotification(AssessmentDetailController.this, assessmentID);
                     cancelNotification(AssessmentDetailController.this, assessmentID + 1000);
-                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Start", getTimeInMillis(start), assessmentID);
-                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment End", getTimeInMillis(end), assessmentID + 1000); // Offset ID
+                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), assessmentID);
+                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), assessmentID + 1000);
                     Intent intent2 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent2);
                 } else {
                     Toast.makeText(AssessmentDetailController.this, "Failed to update assessment", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // Add new assessment
                 AssessmentModel newAssessment = new AssessmentModel(-1, title, start, end, type);
                 boolean success = assessmentDAO.addAssessment(newAssessment);
                 if (success) {
-                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Start", getTimeInMillis(start), newAssessment.getAssessmentID());
-                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment End", getTimeInMillis(end), newAssessment.getAssessmentID() + 1000); // Offset ID
+                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), newAssessment.getAssessmentID());
+                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), newAssessment.getAssessmentID() + 1000); // Offset ID
                     Intent intent3 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent3);
                 } else {
@@ -153,7 +150,8 @@ public class AssessmentDetailController extends AppCompatActivity {
     private void initDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = makeDateString(day, month, year);
+
+            String date = dbHelper.makeDateString(day, month, year);
             if (isEditingStartDate) {
                 editStart.setText(date);
             } else {
@@ -169,51 +167,6 @@ public class AssessmentDetailController extends AppCompatActivity {
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-    }
-
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
-    }
-
-    private String getMonthFormat(int month) {
-        switch (month) {
-            case 1:
-                return "JAN";
-            case 2:
-                return "FEB";
-            case 3:
-                return "MAR";
-            case 4:
-                return "APR";
-            case 5:
-                return "MAY";
-            case 6:
-                return "JUN";
-            case 7:
-                return "JUL";
-            case 8:
-                return "AUG";
-            case 9:
-                return "SEP";
-            case 10:
-                return "OCT";
-            case 11:
-                return "NOV";
-            case 12:
-                return "DEC";
-            default:
-                return "JAN";
-        }
-    }
-    //wherever it splits off make a time and date and make tht exportable there
-
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
     }
 
     private void scheduleNotification(Context context, AssessmentModel assessment, String eventType, long timeInMillis, int requestCode) {
@@ -239,35 +192,4 @@ public class AssessmentDetailController extends AppCompatActivity {
             alarmManager.cancel(pendingIntent);
         }
     }
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "ReminderChannel";
-            String description = "Channel for reminder";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("notify", name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    private long getTimeInMillis(String dateString) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH);
-            Date date = sdf.parse(dateString); // Parse the input date string
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date); // Set the parsed date to the Calendar
-            cal.set(Calendar.HOUR_OF_DAY, 8);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0); // Reset milliseconds
-            return cal.getTimeInMillis();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return -1; // Return a default value or handle the error appropriately
-        }
-    }
-
 }

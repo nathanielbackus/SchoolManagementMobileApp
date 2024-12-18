@@ -18,6 +18,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @SuppressLint("MissingPermission")
     @Override
     public void onReceive(Context context, Intent intent) {
+        createNotificationChannel(context);
         String title = intent.getStringExtra("titleExtra");
         String message = intent.getStringExtra("messageExtra");
         String channelID = "channel_id";
@@ -31,5 +32,18 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManagerCompat notificiationManager = NotificationManagerCompat.from(context);
         notificiationManager.notify(200, builder.build());
     }
+    public void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "ReminderChannel";
+            String description = "Channel for reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notify", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 }
 

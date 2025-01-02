@@ -23,8 +23,8 @@ import java.util.List;
 public class CourseController extends AppCompatActivity {
     Button ToAddCourseActivity, BackButton;
     ListView courseListView;
-    ArrayAdapter<SpannableString> courseArrayAdapter; // ArrayAdapter with SpannableString
-    DataBaseHelper dbHelper; // Use only one instance of DataBaseHelper
+    ArrayAdapter<SpannableString> courseArrayAdapter;
+    DataBaseHelper dbHelper;
     CourseDAO courseDAO;
 
     @Override

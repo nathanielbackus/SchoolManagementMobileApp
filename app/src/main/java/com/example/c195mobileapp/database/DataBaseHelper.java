@@ -1,20 +1,14 @@
 package com.example.c195mobileapp.database;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.c195mobileapp.database.AssessmentDAO;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -112,7 +106,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return makeDateString(day, month, year);
     }
     public String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
+        return getMonthFormat(month) + " " + day + ", " + year;
     }
 
     private String getMonthFormat(int month) {

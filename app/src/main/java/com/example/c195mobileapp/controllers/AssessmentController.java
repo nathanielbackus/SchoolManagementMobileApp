@@ -26,13 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssessmentController extends AppCompatActivity {
-    // Declare variables
     Button ToAddAssessmentActivity, BackButton;
     ListView assessmentListView;
-    ArrayAdapter<SpannableString> appointmentArrayAdapter; // ArrayAdapter with SpannableString
+    ArrayAdapter<SpannableString> appointmentArrayAdapter;
     AssessmentDAO assessmentDAO;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,18 +66,15 @@ public class AssessmentController extends AppCompatActivity {
         }
         assessmentListView.setAdapter(appointmentArrayAdapter);
 
-        // Click to go back to main menu
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AssessmentController.this, MainMenuController.class);
                 startActivity(intent);
             }
         });
 
-        // Click to go to add assessment activity
-        ToAddAssessmentActivity = (Button) findViewById(R.id.ToAddAssessmentActivity);
+        ToAddAssessmentActivity = findViewById(R.id.ToAddAssessmentActivity);
         ToAddAssessmentActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(AssessmentController.this, AssessmentDetailController.class);
@@ -87,22 +82,16 @@ public class AssessmentController extends AppCompatActivity {
             }
         });
 
-        // Click to go to update assessment activity
         assessmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Create an Intent to start the AssessmentDetailController
                 Intent intent = new Intent(AssessmentController.this, AssessmentDetailController.class);
-                // Get the clicked AssessmentModel from the list
                 AssessmentModel selectedAssessment = allAppointments.get(position);
-                // Pass the selected assessment data to the next activity
                 intent.putExtra("assessmentId", selectedAssessment.getAssessmentID());
                 intent.putExtra("assessmentTitle", selectedAssessment.getAssessmentTitle());
                 intent.putExtra("assessmentStart", selectedAssessment.getAssessmentStart());
                 intent.putExtra("assessmentEnd", selectedAssessment.getAssessmentEnd());
                 intent.putExtra("assessmentType", selectedAssessment.getAssessmentType());
 
-                // Start the activity
                 startActivity(intent);
             }
         });

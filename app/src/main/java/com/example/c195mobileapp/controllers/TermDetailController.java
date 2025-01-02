@@ -8,6 +8,7 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,19 +18,19 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.c195mobileapp.R;
-import com.example.c195mobileapp.database.AssessmentDAO;
 import com.example.c195mobileapp.database.CourseDAO;
 import com.example.c195mobileapp.database.DataBaseHelper;
-import com.example.c195mobileapp.database.MentorDAO;
 import com.example.c195mobileapp.database.TermDAO;
-import com.example.c195mobileapp.model.AssessmentModel;
 import com.example.c195mobileapp.model.CourseModel;
-import com.example.c195mobileapp.model.MentorModel;
 import com.example.c195mobileapp.model.TermModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TermDetailController extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class TermDetailController extends AppCompatActivity {
     ArrayAdapter<CourseModel> courseArrayAdapter;
     int termID = -1;
     TextView Header;
+    DataBaseHelper dbHelper = new DataBaseHelper(this);
     private DatePickerDialog datePickerDialog;
     private boolean isEditingStartDate = true;
 
@@ -58,7 +60,7 @@ public class TermDetailController extends AppCompatActivity {
         Header = findViewById(R.id.Header);
         DeleteTermButton = findViewById(R.id.DeleteTermButton);
 
-        DataBaseHelper dbHelper = new DataBaseHelper(TermDetailController.this);
+        termDAO = new TermDAO(dbHelper);
 
         //BACK BUTTON
         BackButton = findViewById(R.id.BackButton);
@@ -71,11 +73,13 @@ public class TermDetailController extends AppCompatActivity {
         });
 
         editStart.setOnClickListener(view -> {
+            populateDatePicker(editStart.getText().toString());
             isEditingStartDate = true;
             datePickerDialog.show();
         });
 
         editEnd.setOnClickListener(view -> {
+            populateDatePicker(editEnd.getText().toString());
             isEditingStartDate = false; //this is to basically differentiate which field the datepickerdialog is using
             datePickerDialog.show();
         });
@@ -93,9 +97,6 @@ public class TermDetailController extends AppCompatActivity {
             }
         };
         courseListView.setAdapter(courseArrayAdapter);
-
-        //TERM DB
-        termDAO = new TermDAO(dbHelper);
 
         //POPULATE STUFF
         Intent intent = getIntent();
@@ -117,11 +118,11 @@ public class TermDetailController extends AppCompatActivity {
                 }
             }
             AddTermButton.setText("Update");
-            Header.setText("Update Course");
+            Header.setText("Update Term");
         } else {
             DeleteTermButton.setVisibility(View.GONE);
-            editStart.setText(getTodaysDate());
-            editEnd.setText(getTodaysDate());
+            editStart.setText(dbHelper.getTodaysDate());
+            editEnd.setText(dbHelper.getTodaysDate());
         }
 
         //ON ADD
@@ -186,65 +187,47 @@ public class TermDetailController extends AppCompatActivity {
     private void initDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = makeDateString(day, month, year);
+
+            String date = dbHelper.makeDateString(day, month, year);
             if (isEditingStartDate) {
                 editStart.setText(date);
             } else {
                 editEnd.setText(date);
             }
         };
+        int year, month, day;
 
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
-
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + ", " + year;
-    }
-
-    private String getMonthFormat(int month) {
-        switch (month) {
-            case 1:
-                return "JAN";
-            case 2:
-                return "FEB";
-            case 3:
-                return "MAR";
-            case 4:
-                return "APR";
-            case 5:
-                return "MAY";
-            case 6:
-                return "JUN";
-            case 7:
-                return "JUL";
-            case 8:
-                return "AUG";
-            case 9:
-                return "SEP";
-            case 10:
-                return "OCT";
-            case 11:
-                return "NOV";
-            case 12:
-                return "DEC";
-            default:
-                return "JAN";
-        }
-    }
-
-    private String getTodaysDate() {
+    private void populateDatePicker(String currentDateText) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         Calendar cal = Calendar.getInstance();
+        try {
+            Date parsedDate = dateFormat.parse(currentDateText);
+            cal.setTime(parsedDate);
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing date: " + currentDateText, e);
+        }
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        month = month + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, selectedYear, selectedMonth, selectedDay) -> {
+            selectedMonth = selectedMonth + 1;
+            String date = dbHelper.makeDateString(selectedDay, selectedMonth, selectedYear);
+            if (isEditingStartDate) {
+                editStart.setText(date);
+            } else {
+                editEnd.setText(date);
+            }
+        };
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 }

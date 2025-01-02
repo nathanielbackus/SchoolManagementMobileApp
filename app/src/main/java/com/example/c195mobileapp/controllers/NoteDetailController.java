@@ -1,15 +1,11 @@
 package com.example.c195mobileapp.controllers;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,16 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.c195mobileapp.R;
 import com.example.c195mobileapp.database.CourseDAO;
 import com.example.c195mobileapp.database.DataBaseHelper;
-import com.example.c195mobileapp.database.MentorDAO;
 import com.example.c195mobileapp.database.NoteDAO;
-import com.example.c195mobileapp.database.TermDAO;
 import com.example.c195mobileapp.model.CourseModel;
-import com.example.c195mobileapp.model.MentorModel;
 import com.example.c195mobileapp.model.NoteModel;
-import com.example.c195mobileapp.model.TermModel;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class NoteDetailController extends AppCompatActivity{
@@ -81,7 +70,6 @@ public class NoteDetailController extends AppCompatActivity{
         courseArrayAdapter = new ArrayAdapter<CourseModel>(NoteDetailController.this, android.R.layout.simple_spinner_item, allCourses) {
             @Override
             public View getView(int position, View convertView, android.view.ViewGroup parent) {
-                // Set the mentor name in the Spinner's selected item view
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setText(allCourses.get(position).getCourseTitle());
                 return textView;
@@ -89,7 +77,6 @@ public class NoteDetailController extends AppCompatActivity{
 
             @Override
             public View getDropDownView(int position, View convertView, android.view.ViewGroup parent) {
-                // Set the mentor name in the dropdown view
                 TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
                 textView.setText(allCourses.get(position).getCourseTitle());
                 return textView;

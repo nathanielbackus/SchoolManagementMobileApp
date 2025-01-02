@@ -3,19 +3,18 @@ package com.example.c195mobileapp.controllers;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -42,6 +41,9 @@ public class AssessmentDetailController extends AppCompatActivity {
     int assessmentID = -1;
     TextView Header;
     private DatePickerDialog datePickerDialog;
+//    DatePicker editStart, editEnd;
+//    TimePicker timeStartTime, timeEndTime;
+    CheckBox notiBox;
     private boolean isEditingStartDate = true;
     DataBaseHelper dbHelper = new DataBaseHelper(this);
     NotificationReceiver receiver = new NotificationReceiver();
@@ -62,6 +64,11 @@ public class AssessmentDetailController extends AppCompatActivity {
         editEnd = findViewById(R.id.editEnd);
         switchPerfObj = findViewById(R.id.switchPerfObj);
         Header = findViewById(R.id.Header);
+//        editStart = findViewById(R.id.editStart);
+//        editEnd = findViewById(R.id.editEnd);
+//        timeStartTime = findViewById(R.id.timeStartTime);
+//        timeEndTime = findViewById(R.id.timeEndTime);
+        notiBox = findViewById(R.id.notiBox);
         deleteAssessmentButton = findViewById(R.id.deleteAssessmentButton);
         assessmentDAO = new AssessmentDAO(dbHelper);
 
@@ -88,6 +95,7 @@ public class AssessmentDetailController extends AppCompatActivity {
             editEnd.setText(dbHelper.getTodaysDate());
             deleteAssessmentButton.setVisibility(View.GONE);
         }
+        //checking if todaysdate doesnt populate on a datepicker when clicking on it
 
         deleteAssessmentButton.setOnClickListener(view -> {
             cancelNotification(AssessmentDetailController.this, assessmentID);
@@ -103,14 +111,17 @@ public class AssessmentDetailController extends AppCompatActivity {
         });
 
         editStart.setOnClickListener(view -> {
-            isEditingStartDate = true; // Indicate that the start date is being edited
+            isEditingStartDate = true;
+            populateDatePicker(editStart.getText().toString());
             datePickerDialog.show();
         });
 
         editEnd.setOnClickListener(view -> {
-            isEditingStartDate = false; // Indicate that the end date is being edited
+            isEditingStartDate = false;
+            populateDatePicker(editEnd.getText().toString());
             datePickerDialog.show();
         });
+
 
         EditAssessmentButton.setOnClickListener(view -> {
             String title = editName.getText().toString();
@@ -124,8 +135,10 @@ public class AssessmentDetailController extends AppCompatActivity {
                 if (success) {
                     cancelNotification(AssessmentDetailController.this, assessmentID);
                     cancelNotification(AssessmentDetailController.this, assessmentID + 1000);
-                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), assessmentID);
-                    scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), assessmentID + 1000);
+                    if (notiBox.isChecked()) {
+                        scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), assessmentID);
+                        scheduleNotification(AssessmentDetailController.this, updatedAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), assessmentID + 1000);
+                    }
                     Intent intent2 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent2);
                 } else {
@@ -135,8 +148,10 @@ public class AssessmentDetailController extends AppCompatActivity {
                 AssessmentModel newAssessment = new AssessmentModel(-1, title, start, end, type);
                 boolean success = assessmentDAO.addAssessment(newAssessment);
                 if (success) {
-                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), newAssessment.getAssessmentID());
-                    scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), newAssessment.getAssessmentID() + 1000); // Offset ID
+                    if (notiBox.isChecked()) {
+                        scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Starts Today", dbHelper.getTimeInMillis(start), newAssessment.getAssessmentID());
+                        scheduleNotification(AssessmentDetailController.this, newAssessment, "Assessment Ends Today", dbHelper.getTimeInMillis(end), newAssessment.getAssessmentID() + 1000);
+                    }
                     Intent intent3 = new Intent(AssessmentDetailController.this, AssessmentController.class);
                     startActivity(intent3);
                 } else {
@@ -158,14 +173,39 @@ public class AssessmentDetailController extends AppCompatActivity {
                 editEnd.setText(date);
             }
         };
+        int year, month, day;
 
         Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+    }
+
+    private void populateDatePicker(String currentDateText) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        try {
+            Date parsedDate = dateFormat.parse(currentDateText);
+            cal.setTime(parsedDate);
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing date: " + currentDateText, e);
+        }
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-
         int style = AlertDialog.THEME_HOLO_LIGHT;
-
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, selectedYear, selectedMonth, selectedDay) -> {
+            selectedMonth = selectedMonth + 1;
+            String date = dbHelper.makeDateString(selectedDay, selectedMonth, selectedYear);
+            if (isEditingStartDate) {
+                editStart.setText(date);
+            } else {
+                editEnd.setText(date);
+            }
+        };
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 

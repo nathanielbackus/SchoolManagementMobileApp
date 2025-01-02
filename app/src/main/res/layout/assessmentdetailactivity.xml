@@ -6,18 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".controllers.AssessmentDetailController">
 
-    <Button
-        android:id="@+id/EditAssessmentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="40dp"
-        android:layout_marginTop="40dp"
-        android:text="Add New Assessment"
-        app:backgroundTint="#FF465A9A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEnd" />
-
     <TextView
         android:id="@+id/Header"
         android:layout_width="0dp"
@@ -49,6 +37,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/AssessmentName"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Performance Assessment"
+        app:layout_constraintEnd_toStartOf="@+id/switchPerfObj"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
     <Switch
         android:id="@+id/switchPerfObj"
         android:layout_width="56dp"
@@ -57,6 +69,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Objective Assessment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toEndOf="@+id/switchPerfObj"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 
     <TextView
@@ -112,39 +135,35 @@
         app:layout_constraintTop_toBottomOf="@+id/editStart" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/notiText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Performance Assessment"
-        app:layout_constraintEnd_toStartOf="@+id/switchPerfObj"
+        android:layout_marginVertical="44dp"
+        app:layout_constraintTop_toBottomOf="@id/editEnd"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintEnd_toStartOf="@id/notiBox"
+        android:text="Notify me at 8:00 AM on these dates:"/>
 
-    <TextView
-        android:id="@+id/textView4"
+    <CheckBox
+        android:id="@+id/notiBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Objective Assessment"
+        android:layout_marginVertical="30dp"
+        app:layout_constraintTop_toBottomOf="@id/editEnd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toEndOf="@+id/switchPerfObj"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintStart_toEndOf="@+id/notiText"/>
 
-    <EditText
-        android:id="@+id/editName"
+    <Button
+        android:id="@+id/EditAssessmentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="40dp"
         android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="@string/AssessmentName"
-        android:inputType="text"
+        android:text="Add New Assessment"
+        app:backgroundTint="#FF465A9A"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Header" />
+        app:layout_constraintTop_toBottomOf="@+id/notiBox" />
 
     <Button
         android:id="@+id/deleteAssessmentButton"
@@ -161,3 +180,194 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".controllers.AssessmentDetailController">
+
+    <TextView
+        android:id="@+id/Header"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:background="#465A9A"
+        android:paddingTop="40px"
+        android:paddingRight="20px"
+        android:text="Add Assessment"
+        android:textAlignment="viewEnd"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/BackButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/BackButton"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:backgroundTint="#465A9A"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="back"
+        android:textSize="40sp"
+        app:cornerRadius="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/AssessmentName"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Header" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Performance Assessment"
+        app:layout_constraintEnd_toStartOf="@+id/switchPerfObj"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <Switch
+        android:id="@+id/switchPerfObj"
+        android:layout_width="56dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Objective Assessment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toEndOf="@+id/switchPerfObj"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <TextView
+        android:id="@+id/sdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:text="Start Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchPerfObj" />
+
+
+    <DatePicker
+        android:id="@+id/editStart"
+        android:datePickerMode="spinner"
+        android:layout_height="75dp"
+        android:layout_width="250dp"
+        android:calendarViewShown="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sdTextView"
+        app:layout_constraintTop_toBottomOf="@+id/switchPerfObj" />
+
+    <TextView
+        android:id="@+id/stTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:text="Start Time:"
+        app:layout_constraintTop_toBottomOf="@id/editStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/timeStartTime"/>
+
+    <TimePicker
+        android:id="@+id/timeStartTime"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stTextView"
+        app:layout_constraintTop_toBottomOf="@id/editStart" />
+
+    <TextView
+        android:id="@+id/edTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:text="End Date:"
+        app:layout_constraintEnd_toStartOf="@+id/editEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeStartTime" />
+
+    <DatePicker
+        android:id="@+id/editEnd"
+        android:datePickerMode="spinner"
+        android:layout_height="75dp"
+        android:layout_width="250dp"
+        android:calendarViewShown="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edTextView"
+        app:layout_constraintTop_toBottomOf="@id/timeStartTime" />
+
+    <TextView
+        android:id="@+id/etTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time:"
+        android:layout_marginVertical="30dp"
+        app:layout_constraintTop_toBottomOf="@id/editEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/timeEndTime"/>
+
+    <TimePicker
+        android:id="@+id/timeEndTime"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/etTextView"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+
+    <Button
+        android:id="@+id/EditAssessmentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
+        android:text="Add New Assessment"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notiBox" />
+
+    <Button
+        android:id="@+id/deleteAssessmentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="40dp"
+        android:text="Delete Assessment"
+        android:visibility="gone"
+        app:backgroundTint="#FF465A9A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EditAssessmentButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout> -->

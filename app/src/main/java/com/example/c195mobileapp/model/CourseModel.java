@@ -1,16 +1,13 @@
 package com.example.c195mobileapp.model;
 
-import java.util.List;
-
 public class CourseModel {
     private int courseID;
     private String courseTitle;
     private String courseStart;
     private String courseEnd;
     private int status;
-    private int mentorID; // Store assessment IDs related to this course
+    private int mentorID;
 
-    // Constructor without associated assessments
     public CourseModel(int courseID, String courseTitle, String courseStart, String courseEnd, int status, int mentorID) {
         this.courseID = courseID;
         this.courseTitle = courseTitle;
@@ -20,7 +17,6 @@ public class CourseModel {
         this.mentorID = mentorID;
     }
 
-    // Getters and Setters
     public int getCourseID() {
         return courseID;
     }
@@ -69,5 +65,3 @@ public class CourseModel {
         this.mentorID = mentorID;
     }
 }
-
-//maybe a check to find out if they are within dates

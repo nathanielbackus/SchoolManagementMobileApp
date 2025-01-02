@@ -1,23 +1,19 @@
 package com.example.c195mobileapp.controllers;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +49,7 @@ public class CourseDetailController extends AppCompatActivity {
     AssessmentDAO assessmentDAO;
     ArrayAdapter<MentorModel> mentorArrayAdapter;
     ArrayAdapter<AssessmentModel> assessmentArrayAdapter;
+    CheckBox notiBox;
     int courseID = -1;
     CourseDAO courseDAO;
     TextView Header;
@@ -69,6 +66,7 @@ public class CourseDetailController extends AppCompatActivity {
         editName = findViewById(R.id.editName);
         editStart = findViewById(R.id.editStart);
         editEnd = findViewById(R.id.editEnd);
+        notiBox = findViewById(R.id.notiBox);
         AddCourseButton = findViewById(R.id.AddCourseButton);
         Header = findViewById(R.id.Header);
         deleteCourseButton = findViewById(R.id.deleteCourseButton);
@@ -85,7 +83,6 @@ public class CourseDetailController extends AppCompatActivity {
         //BACK BUTTON
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseDetailController.this, CourseController.class);
                 startActivity(intent);
@@ -94,11 +91,13 @@ public class CourseDetailController extends AppCompatActivity {
 
         editStart.setOnClickListener(view -> {
             isEditingStartDate = true; // indicate that the start date is being edited
+            populateDatePicker(editStart.getText().toString());
             datePickerDialog.show();
         });
 
         editEnd.setOnClickListener(view -> {
             isEditingStartDate = false; // indicate that the end date is being edited
+            populateDatePicker(editEnd.getText().toString());
             datePickerDialog.show();
         });
 
@@ -210,12 +209,14 @@ public class CourseDetailController extends AppCompatActivity {
             if (courseTitle != null) {
                 if (courseID != -1) {
                     CourseModel updatedCourse = new CourseModel(courseID, courseTitle, start, end, status, mentorID);
-                    boolean success = courseDAO.updateCourse(updatedCourse, associatedAssessmentIDs);//addassociatedassessmentids
+                    boolean success = courseDAO.updateCourse(updatedCourse, associatedAssessmentIDs);
                     if (success) {
                         cancelNotification(CourseDetailController.this, courseID);
                         cancelNotification(CourseDetailController.this, courseID + 1000);
-                        scheduleNotification(CourseDetailController.this, updatedCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
-                        scheduleNotification(CourseDetailController.this, updatedCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        if (notiBox.isChecked()) {
+                            scheduleNotification(CourseDetailController.this, updatedCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
+                            scheduleNotification(CourseDetailController.this, updatedCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        }
                         Intent intent2 = new Intent(CourseDetailController.this, CourseController.class);
                         startActivity(intent2);
                     } else {
@@ -226,8 +227,10 @@ public class CourseDetailController extends AppCompatActivity {
                     CourseModel newCourse = new CourseModel(-1, courseTitle, start, end, status, mentorID);
                     boolean success = courseDAO.addCourse(newCourse, associatedAssessmentIDs);
                     if (success) {
-                        scheduleNotification(CourseDetailController.this, newCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
-                        scheduleNotification(CourseDetailController.this, newCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        if (notiBox.isChecked()) {
+                            scheduleNotification(CourseDetailController.this, newCourse, "Course Starts Today", dbHelper.getTimeInMillis(start), courseID);
+                            scheduleNotification(CourseDetailController.this, newCourse, "Course Ends Today", dbHelper.getTimeInMillis(end), courseID + 1000);
+                        }
                         Intent intent3 = new Intent(CourseDetailController.this, CourseController.class);
                         startActivity(intent3);
                     } else {
@@ -260,6 +263,31 @@ public class CourseDetailController extends AppCompatActivity {
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+    }
+
+    private void populateDatePicker(String currentDateText) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        try {
+            Date parsedDate = dateFormat.parse(currentDateText);
+            cal.setTime(parsedDate);
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing date: " + currentDateText, e);
+        }
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, selectedYear, selectedMonth, selectedDay) -> {
+            selectedMonth = selectedMonth + 1;
+            String date = dbHelper.makeDateString(selectedDay, selectedMonth, selectedYear);
+            if (isEditingStartDate) {
+                editStart.setText(date);
+            } else {
+                editEnd.setText(date);
+            }
+        };
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 

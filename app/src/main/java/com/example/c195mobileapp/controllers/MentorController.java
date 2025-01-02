@@ -9,7 +9,6 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterViewAnimator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -69,16 +68,14 @@ public class MentorController extends AppCompatActivity {
 
         BackButton = findViewById(R.id.BackButton);
         BackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MentorController.this, MainMenuController.class);
                 startActivity(intent);
             }
         });
 
-        ToAddMentorActivity = (Button) findViewById(R.id.ToAddMentorActivity);
+        ToAddMentorActivity = findViewById(R.id.ToAddMentorActivity);
         ToAddMentorActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MentorController.this, MentorDetailController.class);
                 startActivity(intent);
@@ -86,7 +83,6 @@ public class MentorController extends AppCompatActivity {
         });
 
         mentorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MentorController.this, MentorDetailController.class);
                 MentorModel selectedMentor = allMentors.get(position);

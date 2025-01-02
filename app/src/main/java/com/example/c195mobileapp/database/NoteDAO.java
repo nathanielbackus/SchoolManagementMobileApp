@@ -1,12 +1,9 @@
 package com.example.c195mobileapp.database;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.c195mobileapp.model.CourseModel;
 import com.example.c195mobileapp.model.NoteModel;
 
 import java.util.ArrayList;

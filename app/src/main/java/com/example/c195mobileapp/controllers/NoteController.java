@@ -16,7 +16,6 @@ import com.example.c195mobileapp.R;
 import com.example.c195mobileapp.database.CourseDAO;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.database.NoteDAO;
-import com.example.c195mobileapp.model.CourseModel;
 import com.example.c195mobileapp.model.NoteModel;
 
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ import java.util.List;
 public class NoteController extends AppCompatActivity {
     Button ToNoteDetailActivity, BackButton;
     ListView noteListView;
-    ArrayAdapter<SpannableString> noteArrayAdapter; // ArrayAdapter with SpannableString
-    DataBaseHelper dbHelper; // Use only one instance of DataBaseHelper
+    ArrayAdapter<SpannableString> noteArrayAdapter;
+    DataBaseHelper dbHelper;
     NoteDAO noteDAO;
     CourseDAO courseDAO;
 

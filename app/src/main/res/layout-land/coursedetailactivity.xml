@@ -84,7 +84,7 @@
         app:layout_constraintEnd_toStartOf="@+id/editEnd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editStart"
-        app:layout_constraintBottom_toTopOf="@id/mentorSpinner"/>
+        app:layout_constraintBottom_toTopOf="@id/notiBox"/>
 
     <Button
         android:id="@+id/editEnd"
@@ -99,7 +99,26 @@
         app:layout_constraintEnd_toStartOf="@id/assessmentListView"
         app:layout_constraintStart_toEndOf="@id/edTextView"
         app:layout_constraintTop_toBottomOf="@+id/editStart"
-        app:layout_constraintBottom_toTopOf="@id/mentorSpinner"/>
+        app:layout_constraintBottom_toTopOf="@id/notiBox"/>
+
+    <TextView
+        android:id="@+id/notiText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify me at 8:00 AM on these dates:"
+        app:layout_constraintBottom_toTopOf="@id/mentorSpinner"
+        app:layout_constraintEnd_toStartOf="@id/notiBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+
+    <CheckBox
+        android:id="@+id/notiBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/mentorSpinner"
+        app:layout_constraintEnd_toStartOf="@id/assessmentListView"
+        app:layout_constraintStart_toEndOf="@+id/notiText"
+        app:layout_constraintTop_toBottomOf="@id/editEnd" />
 
     <TextView
         android:id="@+id/mentorLabel"
@@ -110,7 +129,7 @@
         app:layout_constraintBottom_toTopOf="@+id/statusSpinner"
         app:layout_constraintEnd_toStartOf="@+id/mentorSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEnd" />
+        app:layout_constraintTop_toBottomOf="@+id/notiBox" />
 
     <Spinner
         android:id="@+id/mentorSpinner"
@@ -119,7 +138,7 @@
         app:layout_constraintBottom_toTopOf="@id/statusSpinner"
         app:layout_constraintEnd_toStartOf="@id/assessmentListView"
         app:layout_constraintStart_toEndOf="@id/mentorLabel"
-        app:layout_constraintTop_toBottomOf="@id/editEnd" />
+        app:layout_constraintTop_toBottomOf="@id/notiBox" />
 
     <TextView
         android:id="@+id/statusLabel"

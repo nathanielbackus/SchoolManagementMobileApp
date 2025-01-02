@@ -2,7 +2,6 @@ package com.example.c195mobileapp.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.c195mobileapp.R;
 import com.example.c195mobileapp.database.DataBaseHelper;
 import com.example.c195mobileapp.database.TermDAO;
-import com.example.c195mobileapp.model.CourseModel;
 import com.example.c195mobileapp.model.TermModel;
 
 import java.util.ArrayList;
@@ -77,7 +75,5 @@ public class TermController extends AppCompatActivity {
             intent.putExtra("termEnd", selectedTerm.getTermEnd());
             startActivity(intent);
         });
-
-
     }
 }
